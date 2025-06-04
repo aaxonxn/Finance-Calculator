@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .balance-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .balance {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .positive { color: #10b981; }
+        .negative { color: #ef4444; }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus {
+            border-color: #3b82f6;
+        }
+        
+        .calc-btn {
+            background: #f3f4f6;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background 0.2s;
+        }
+        
+        .calc-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .button-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-add {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-add:hover:not(:disabled) {
+            background: #059669;
+        }
+        
+        .btn-spend {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-spend:hover:not(:disabled) {
+            background: #dc2626;
+        }
+        
+        .history-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .transaction {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .transaction.income {
+            background: #f0fdf4;
+            border-left-color: #10b981;
+        }
+        
+        .transaction.expense {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        
+        .transaction-info {
+            flex: 1;
+        }
+        
+        .transaction-amount {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .transaction-reason {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        
+        .transaction-date {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .delete-btn:hover {
+            background: #f3f4f6;
+            color: #ef4444;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+            font-size: 16px;
+        }
+        
+        .calculator-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .calculator {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px;
+            max-width: 300px;
+            width: 100%;
+        }
+        
+        .calc-display {
+            background: #f3f4f6;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: right;
+            font-size: 24px;
+            font-family: monospace;
+            margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .calc-button {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .calc-button.number {
+            background: #f3f4f6;
+            color: #333;
+        }
+        
+        .calc-button.operator {
+            background: #f97316;
+            color: white;
+        }
+        
+        .calc-button.equals {
+            background: #3b82f6;
+            color: white;
+            grid-column: span 2;
+        }
+        
+        .calc-button.zero {
+            grid-column: span 2;
+        }
+        
+        .calc-button.use {
+            background: #10b981;
+            color: white;
+        }
+        
+        .calc-button:hover {
+            opacity: 0.8;
+        }
+        
+        .close-calc {
+            width: 100%;
+            padding: 12px;
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .close-calc:hover {
+            background: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="card">
+            <div class="header">
+                <div class="title">Money Tracker</div>
+                <div class="balance-label">Current Balance</div>
+                <div class="balance" id="balance">£0.00</div>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="card">
+            <div class="input-group">
+                <div class="input-row">
+                    <input type="number" id="amount" placeholder="Enter amount" step="0.01">
+                    <button class="calc-btn" onclick="showCalculator()">🧮</button>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="reason" placeholder="Reason (required for spending)">
+            </div>
+            
+            <div class="button-row">
+                <button class="btn btn-add" onclick="addMoney()">
+                    ➕ Add Money
+                </button>
+                <button class="btn btn-spend" onclick="subtractMoney()">
+                    ➖ Spend
+                </button>
+            </div>
+        </div>
+
+        <!-- Transaction History -->
+        <div class="card">
+            <div class="history-title">Transaction History</div>
+            <div id="transactions">
+                <div class="empty-state">
+                    No transactions yet. Add some money to get started!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculator Modal -->
+    <div class="calculator-modal" id="calculatorModal">
+        <div class="calculator">
+            <div class="calc-display" id="calcDisplay">0</div>
+            <div class="calc-grid">
+                <button class="calc-button operator" onclick="handleCalc('C')">C</button>
+                <button class="calc-button operator" onclick="handleCalc('⌫')">⌫</button>
+                <button class="calc-button operator" onclick="handleCalc('÷')">÷</button>
+                <button class="calc-button use" onclick="handleCalc('Use')">Use</button>
+                
+                <button class="calc-button number" onclick="handleCalc('7')">7</button>
+                <button class="calc-button number" onclick="handleCalc('8')">8</button>
+                <button class="calc-button number" onclick="handleCalc('9')">9</button>
+                <button class="calc-button operator" onclick="handleCalc('×')">×</button>
+                
+                <button class="calc-button number" onclick="handleCalc('4')">4</button>
+                <button class="calc-button number" onclick="handleCalc('5')">5</button>
+                <button class="calc-button number" onclick="handleCalc('6')">6</button>
+                <button class="calc-button operator" onclick="handleCalc('-')">-</button>
+                
+                <button class="calc-button number" onclick="handleCalc('1')">1</button>
+                <button class="calc-button number" onclick="handleCalc('2')">2</button>
+                <button class="calc-button number" onclick="handleCalc('3')">3</button>
+                <button class="calc-button operator" onclick="handleCalc('+')">+</button>
+                
+                <button class="calc-button number zero" onclick="handleCalc('0')">0</button>
+                <button class="calc-button number" onclick="handleCalc('.')">.</button>
+                <button class="calc-button equals" onclick="handleCalc('=')">=</button>
+            </div>
+            <button class="close-calc" onclick="hideCalculator()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let balance = 0;
+        let transactions = [];
+        let calcInput = '';
+        let calcDisplay = '0';
+
+        // Load saved data
+        function loadData() {
+            const savedBalance = localStorage.getItem('moneyTrackerBalance');
+            const savedTransactions = localStorage.getItem('moneyTrackerTransactions');
+            
+            if (savedBalance) {
+                balance = parseFloat(savedBalance);
+                updateBalance();
+            }
+            
+            if (savedTransactions) {
+                transactions = JSON.parse(savedTransactions);
+                updateTransactionHistory();
+            }
+        }
+
+        // Save data
+        function saveData() {
+            localStorage.setItem('moneyTrackerBalance', balance.toString());
+            localStorage.setItem('moneyTrackerTransactions', JSON.stringify(transactions));
+        }
+
+        // Update balance display
+        function updateBalance() {
+            const balanceEl = document.getElementById('balance');
+            balanceEl.textContent = `£${balance.toFixed(2)}`;
+            balanceEl.className = `balance ${balance >= 0 ? 'positive' : 'negative'}`;
+        }
+
+        // Add money
+        function addMoney() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const reason = document.getElementById('reason').value || 'Money added';
+            
+            if (amount && amount > 0) {
+                const transaction = {
+                    id: Date.now(),
+                    type: 'income',
+                    amount: amount,
+                    reason: reason,
+                    date: new Date().toLocaleDateString('en-GB'),
+                    time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+                };
+                
+                balance += amount;
+                transactions.unshift(transaction);
+                
+                updateBalance();
+                updateTransactionHistory();
+                saveData();
+                
+                // Clear inputs
+                document.getElementById('amount').value = '';
+                document.getElementById('reason').value = '';
+            }
+        }
+
+        // Subtract money
+        function subtractMoney() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const reason = document.getElementById('reason').value.trim();
+            
+            if (amount && amount > 0 && reason) {
+                const transaction = {
+                    id: Date.now(),
+                    type: 'expense',
+                    amount: amount,
+                    reason: reason,
+                    date: new Date().toLocaleDateString('en-GB'),
+                    time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+                };
+                
+                balance -= amount;
+                transactions.unshift(transaction);
+                
+                updateBalance();
+                updateTransactionHistory();
+                saveData();
+                
+                // Clear inputs
+                document.getElementById('amount').value = '';
+                document.getElementById('reason').value = '';
+            } else {
+                alert('Please enter amount and reason for spending');
+            }
+        }
+
+        // Delete transaction
+        function deleteTransaction(id) {
+            if (confirm('Are you sure you want to delete this transaction?')) {
+                const transaction = transactions.find(t => t.id === id);
+                if (transaction) {
+                    if (transaction.type === 'income') {
+                        balance -= transaction.amount;
+                    } else {
+                        balance += transaction.amount;
+                    }
+                    
+                    transactions = transactions.filter(t => t.id !== id);
+                    updateBalance();
+                    updateTransactionHistory();
+                    saveData();
+                }
+            }
+        }
+
+        // Update transaction history display
+        function updateTransactionHistory() {
+            const container = document.getElementById('transactions');
+            
+            if (transactions.length === 0) {
+                container.innerHTML = '<div class="empty-state">No transactions yet. Add some money to get started!</div>';
+                return;
+            }
+            
+            container.innerHTML = transactions.map(transaction => `
+                <div class="transaction ${transaction.type}">
+                    <div class="transaction-info">
+                        <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
+                            ${transaction.type === 'income' ? '+' : '-'}£${transaction.amount.toFixed(2)}
+                        </div>
+                        <div class="transaction-reason">${transaction.reason}</div>
+                        <div class="transaction-date">${transaction.date} at ${transaction.time}</div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteTransaction(${transaction.id})">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        // Calculator functions
+        function showCalculator() {
+            document.getElementById('calculatorModal').style.display = 'flex';
+        }
+
+        function hideCalculator() {
+            document.getElementById('calculatorModal').style.display = 'none';
+        }
+
+        function handleCalc(value) {
+            if (value === '=') {
+                try {
+                    const result = eval(calcInput.replace(/×/g, '*').replace(/÷/g, '/'));
+                    calcDisplay = result.toString();
+                    calcInput = result.toString();
+                } catch {
+                    calcDisplay = 'Error';
+                    calcInput = '';
+                }
+            } else if (value === 'C') {
+                calcDisplay = '0';
+                calcInput = '';
+            } else if (value === '⌫') {
+                calcInput = calcInput.slice(0, -1);
+                calcDisplay = calcInput || '0';
+            } else if (value === 'Use') {
+                document.getElementById('amount').value = calcDisplay;
+                hideCalculator();
+                return;
+            } else {
+                if (calcInput === '0' || calcDisplay === 'Error') {
+                    calcInput = value;
+                } else {
+                    calcInput += value;
+                }
+                calcDisplay = calcInput;
+            }
+            
+            document.getElementById('calcDisplay').textContent = calcDisplay;
+        }
+
+        // Load data when page loads
+        window.onload = loadData;
+    </script>
+</body>
+</html>
