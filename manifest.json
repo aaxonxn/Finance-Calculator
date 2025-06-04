@@ -4,8 +4,8 @@
   "description": "Your personal money tracking app.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#764ba2",
-  "theme_color": "#667eea",
+  "background_color": "#1a202c",
+  "theme_color": "#1a202c",
   "icons": [
     {
       "src": "icons/icon-192x192.png",
