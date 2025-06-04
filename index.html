@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Money Tracker</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea"> 
     <style>
         * {
             margin: 0;
@@ -310,16 +312,14 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="card">
             <div class="header">
                 <div class="title">Money Tracker</div>
                 <div class="balance-label">Current Balance</div>
-                <div class="balance" id="balance">£0.00</div>
+                <div class="balance" id="balance">₹0.00</div>
             </div>
         </div>
 
-        <!-- Input Section -->
         <div class="card">
             <div class="input-group">
                 <div class="input-row">
@@ -342,7 +342,6 @@
             </div>
         </div>
 
-        <!-- Transaction History -->
         <div class="card">
             <div class="history-title">Transaction History</div>
             <div id="transactions">
@@ -353,7 +352,6 @@
         </div>
     </div>
 
-    <!-- Calculator Modal -->
     <div class="calculator-modal" id="calculatorModal">
         <div class="calculator">
             <div class="calc-display" id="calcDisplay">0</div>
@@ -417,7 +415,7 @@
         // Update balance display
         function updateBalance() {
             const balanceEl = document.getElementById('balance');
-            balanceEl.textContent = `£${balance.toFixed(2)}`;
+            balanceEl.textContent = `₹${balance.toFixed(2)}`;
             balanceEl.className = `balance ${balance >= 0 ? 'positive' : 'negative'}`;
         }
 
@@ -511,7 +509,7 @@
                 <div class="transaction ${transaction.type}">
                     <div class="transaction-info">
                         <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
-                            ${transaction.type === 'income' ? '+' : '-'}£${transaction.amount.toFixed(2)}
+                            ${transaction.type === 'income' ? '+' : '-'}₹${transaction.amount.toFixed(2)}
                         </div>
                         <div class="transaction-reason">${transaction.reason}</div>
                         <div class="transaction-date">${transaction.date} at ${transaction.time}</div>
@@ -547,12 +545,14 @@
                 calcInput = calcInput.slice(0, -1);
                 calcDisplay = calcInput || '0';
             } else if (value === 'Use') {
-                document.getElementById('amount').value = calcDisplay;
+                document.getElementById('amount').value = parseFloat(calcDisplay).toFixed(2); // Ensure it's a number and formatted
                 hideCalculator();
                 return;
             } else {
-                if (calcInput === '0' || calcDisplay === 'Error') {
+                if (calcInput === '0' && value !== '.') { // Prevent multiple leading zeros unless it's a decimal
                     calcInput = value;
+                } else if (value === '.' && calcInput.includes('.')) { // Prevent multiple decimal points
+                    // Do nothing
                 } else {
                     calcInput += value;
                 }
@@ -564,6 +564,19 @@
 
         // Load data when page loads
         window.onload = loadData;
+
+        // Register Service Worker (MUST BE AT THE END OF THE BODY OR IN A SEPARATE JS FILE)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
