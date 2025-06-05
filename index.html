@@ -6,10 +6,10 @@
     <title>Money Tracker</title>
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1a202c"> <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <meta name="theme-color" content="#000000"> <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
-        /* General Reset & Body for Dark Theme */
+        /* General Reset & Body for Black Theme */
         * {
             margin: 0;
             padding: 0;
@@ -18,10 +18,10 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1a202c; /* Dark background */
+            background: black; /* Pure black background */
             color: #e2e8f0; /* Light text for contrast */
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px; /* Reduced padding for smaller tiles */
         }
 
         .container {
@@ -29,35 +29,40 @@
             margin: 0 auto;
         }
 
-        /* Card Styles for Dark Theme */
+        /* Card Styles for Grey Tiles */
         .card {
-            background: #2d3748; /* Slightly lighter dark for cards */
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Stronger shadow for depth */
+            background: #333; /* Dark grey for cards */
+            border-radius: 15px; /* Slightly smaller border-radius */
+            padding: 15px; /* Reduced padding for smaller tiles */
+            margin-bottom: 10px; /* Reduced margin for smaller tiles */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5); /* Stronger shadow for depth on black */
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Slightly reduced margin */
         }
 
+        /* Dynamic Title Styling */
         .title {
-            font-size: 28px;
+            font-size: 26px; /* Slightly smaller font for title */
             font-weight: bold;
             color: #edf2f7; /* Lighter title color */
-            margin-bottom: 15px;
+            margin-bottom: 10px; /* Slightly reduced margin */
+            overflow: hidden; /* Prevent text overflow */
+            text-overflow: ellipsis; /* Add ellipsis if text overflows */
+            white-space: nowrap; /* Keep text on single line */
+            padding: 0 5px; /* Little padding to prevent sticking to edge */
         }
 
         .balance-label {
-            font-size: 14px;
+            font-size: 13px; /* Slightly smaller font */
             color: #a0aec0; /* Subtler label color */
-            margin-bottom: 8px;
+            margin-bottom: 5px; /* Reduced margin */
         }
 
         .balance {
-            font-size: 36px;
+            font-size: 34px; /* Slightly smaller font */
             font-weight: bold;
             margin-bottom: 10px;
         }
@@ -66,9 +71,9 @@
         .positive { color: #38a169; } /* Slightly softer green */
         .negative { color: #e53e3e; } /* Slightly softer red */
 
-        /* Input Fields for Dark Theme */
+        /* Input Fields */
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 10px; /* Reduced margin */
         }
 
         .input-row {
@@ -79,11 +84,11 @@
 
         input {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #4a5568; /* Darker border */
-            border-radius: 12px;
-            font-size: 16px;
-            background: #2d3748; /* Same as card background */
+            padding: 12px; /* Reduced padding */
+            border: 2px solid #555; /* Darker border */
+            border-radius: 10px; /* Slightly smaller border-radius */
+            font-size: 15px; /* Slightly smaller font */
+            background: #444; /* Darker background for input */
             color: #e2e8f0; /* Light text */
             outline: none;
             transition: border-color 0.2s;
@@ -97,34 +102,21 @@
             border-color: #63b3ed; /* Accent blue on focus */
         }
 
-        .calc-btn {
-            background: #4a5568; /* Darker button for calculator icon */
-            border: none;
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            font-size: 20px;
-            transition: background 0.2s;
-            color: #e2e8f0; /* Light icon */
-        }
+        /* Removed .calc-btn and related styles */
 
-        .calc-btn:hover {
-            background: #6a768d;
-        }
-
-        /* Buttons for Dark Theme */
+        /* Buttons */
         .button-row {
             display: flex;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 10px; /* Reduced gap */
+            margin-top: 15px; /* Reduced margin */
         }
 
         .btn {
             flex: 1;
-            padding: 15px;
+            padding: 12px; /* Reduced padding */
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 10px; /* Slightly smaller border-radius */
+            font-size: 15px; /* Slightly smaller font */
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -157,19 +149,19 @@
             background: #c53030;
         }
 
-        /* History Title for Dark Theme */
+        /* History Title */
         .history-title {
-            font-size: 20px;
+            font-size: 18px; /* Slightly smaller font */
             font-weight: 600;
             color: #edf2f7; /* Lighter title */
             margin-bottom: 15px;
         }
 
-        /* Transaction Items for Dark Theme */
+        /* Transaction Items */
         .transaction {
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
+            padding: 12px; /* Reduced padding */
+            border-radius: 10px; /* Slightly smaller border-radius */
+            margin-bottom: 8px; /* Reduced margin */
             border-left: 4px solid;
             display: flex;
             justify-content: space-between;
@@ -191,19 +183,19 @@
         }
 
         .transaction-amount {
-            font-size: 16px;
+            font-size: 15px; /* Slightly smaller font */
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 4px; /* Reduced margin */
         }
 
         .transaction-reason {
-            font-size: 14px;
+            font-size: 13px; /* Slightly smaller font */
             color: #cbd5e0; /* Lighter text for reason */
-            margin-bottom: 3px;
+            margin-bottom: 2px; /* Reduced margin */
         }
 
         .transaction-date {
-            font-size: 12px;
+            font-size: 11px; /* Slightly smaller font */
             color: #a0aec0; /* Subtler text for date */
         }
 
@@ -212,129 +204,35 @@
             border: none;
             color: #a0aec0; /* Lighter icon */
             cursor: pointer;
-            padding: 5px;
-            border-radius: 6px;
-            font-size: 16px;
+            padding: 4px; /* Reduced padding */
+            border-radius: 5px; /* Slightly smaller border-radius */
+            font-size: 15px; /* Slightly smaller font */
         }
 
         .delete-btn:hover {
-            background: #4a5568;
+            background: #444; /* Matches input background on hover */
             color: #e53e3e;
         }
 
         .empty-state {
             text-align: center;
             color: #a0aec0;
-            padding: 40px 20px;
-            font-size: 16px;
+            padding: 30px 15px; /* Reduced padding */
+            font-size: 15px; /* Slightly smaller font */
         }
 
-        /* Calculator Modal for Dark Theme */
-        .calculator-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7); /* More opaque background */
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .calculator {
-            background: #2d3748; /* Same as card background */
-            border-radius: 20px;
-            padding: 25px;
-            margin: 20px;
-            max-width: 300px;
-            width: 100%;
-        }
-
-        .calc-display {
-            background: #1a202c; /* Darker background for display */
-            border-radius: 12px;
-            padding: 20px;
-            text-align: right;
-            font-size: 24px;
-            font-family: monospace;
-            margin-bottom: 20px;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            color: #edf2f7; /* Light text */
-        }
-
-        .calc-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .calc-button {
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #edf2f7; /* Light text for calc buttons */
-        }
-
-        .calc-button.number {
-            background: #4a5568; /* Dark grey for numbers */
-        }
-
-        .calc-button.operator {
-            background: #d69e2e; /* Orange for operators */
-        }
-
-        .calc-button.equals {
-            background: #4299e1; /* Blue for equals */
-            grid-column: span 2;
-        }
-
-        .calc-button.zero {
-            grid-column: span 2;
-        }
-
-        .calc-button.use {
-            background: #38a169; /* Green for use */
-        }
-
-        .calc-button:hover {
-            opacity: 0.8;
-        }
-
-        .close-calc {
-            width: 100%;
-            padding: 12px;
-            background: #6a768d; /* Grey for close */
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .close-calc:hover {
-            background: #4a5568;
-        }
+        /* Removed calculator-modal styles */
 
         /* Styles for New Features (adapted for Dark Theme) */
         .btn-back {
             background: #6a768d; /* Darker grey */
             color: white;
-            padding: 10px 15px;
+            padding: 8px 12px; /* Reduced padding */
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            margin-bottom: 10px;
+            font-size: 15px; /* Slightly smaller font */
+            margin-bottom: 8px; /* Reduced margin */
             display: flex;
             align-items: center;
             gap: 5px;
@@ -346,16 +244,16 @@
         #exportOptions label,
         #exportOptions select,
         #exportOptions button {
-            margin-bottom: 10px;
+            margin-bottom: 8px; /* Reduced margin */
             display: block;
             width: 100%;
         }
         #exportOptions select {
-            padding: 10px;
+            padding: 8px; /* Reduced padding */
             border-radius: 8px;
-            border: 1px solid #4a5568;
-            font-size: 16px;
-            background-color: #2d3748;
+            border: 1px solid #555; /* Darker border */
+            font-size: 15px; /* Slightly smaller font */
+            background-color: #444; /* Darker background */
             color: #e2e8f0;
         }
         #exportOptions button {
@@ -375,48 +273,49 @@
             color: white;
         }
         hr {
-            margin: 20px 0;
+            margin: 15px 0; /* Reduced margin */
             border: none;
-            border-top: 1px solid #4a5568; /* Darker hr */
+            border-top: 1px solid #555; /* Darker hr */
         }
 
 
-        /* Sheet Management Styles (adapted for Dark Theme) */
+        /* Sheet Management Styles */
         .sheet-management {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px; /* Reduced gap */
+            margin-bottom: 15px; /* Reduced margin */
         }
         .sheet-management label {
-            color: #a0aec0; /* Label color for dark theme */
+            color: #a0aec0;
+            font-size: 13px; /* Smaller font */
         }
         .sheet-management select {
             width: 100%;
-            padding: 10px;
-            border-radius: 12px;
-            border: 2px solid #4a5568; /* Darker border */
-            font-size: 16px;
-            background-color: #2d3748; /* Darker background */
-            color: #e2e8f0; /* Light text */
+            padding: 8px; /* Reduced padding */
+            border-radius: 10px; /* Slightly smaller border-radius */
+            border: 2px solid #555; /* Darker border */
+            font-size: 15px; /* Slightly smaller font */
+            background-color: #444; /* Darker background */
+            color: #e2e8f0;
             outline: none;
         }
         .sheet-management .button-row {
             margin-top: 0;
         }
         .sheet-management .button-row .btn {
-            padding: 10px;
-            font-size: 14px;
+            padding: 8px; /* Further reduced padding for sheet buttons */
+            font-size: 13px; /* Further reduced font size */
         }
 
-        /* Confirmation Modal Styles (adapted for Dark Theme) */
+        /* Confirmation Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.8); /* Even darker background */
+            background: rgba(0,0,0,0.85); /* Even darker, more opaque background */
             display: none;
             align-items: center;
             justify-content: center;
@@ -424,36 +323,36 @@
         }
 
         .modal-content {
-            background: #2d3748; /* Darker background */
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Stronger shadow */
+            background: #333; /* Darker background */
+            padding: 25px; /* Reduced padding */
+            border-radius: 15px; /* Smaller border-radius */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7); /* Stronger shadow */
             text-align: center;
-            max-width: 350px;
+            max-width: 320px; /* Slightly smaller max-width */
             width: 90%;
-            color: #edf2f7; /* Light text */
+            color: #edf2f7;
         }
 
         .modal-message {
-            font-size: 18px;
+            font-size: 16px; /* Slightly smaller font */
             color: #edf2f7;
-            margin-bottom: 25px;
+            margin-bottom: 20px; /* Reduced margin */
         }
 
         .modal-buttons {
             display: flex;
-            gap: 15px;
+            gap: 10px; /* Reduced gap */
             justify-content: center;
         }
         .modal-buttons button {
             flex: 1;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: 16px;
+            padding: 10px 15px; /* Reduced padding */
+            border-radius: 8px; /* Smaller border-radius */
+            font-size: 15px; /* Slightly smaller font */
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
-            color: white; /* Buttons in modal use white text */
+            color: white;
         }
         .modal-buttons button:first-child { /* Yes button */
             background-color: #38a169; /* Green */
@@ -473,8 +372,7 @@
     <div id="mainPage" class="container">
         <div class="card">
             <div class="header">
-                <div class="title">Money Tracker</div>
-                <div class="balance-label">Current Balance</div>
+                <div class="title" id="mainPageTitle"></div> <div class="balance-label">Current Balance</div>
                 <div class="balance" id="balance">₹0.00</div>
             </div>
         </div>
@@ -495,8 +393,7 @@
             <div class="input-group">
                 <div class="input-row">
                     <input type="number" id="amount" placeholder="Enter amount" step="0.01">
-                    <button class="calc-btn" onclick="showCalculator()">🧮</button>
-                </div>
+                    </div>
             </div>
 
             <div class="input-group">
@@ -543,38 +440,6 @@
         </div>
     </div>
 
-    <div class="calculator-modal" id="calculatorModal">
-        <div class="calculator">
-            <div class="calc-display" id="calcDisplay">0</div>
-            <div class="calc-grid">
-                <button class="calc-button operator" onclick="handleCalc('C')">C</button>
-                <button class="calc-button operator" onclick="handleCalc('⌫')">⌫</button>
-                <button class="calc-button operator" onclick="handleCalc('÷')">÷</button>
-                <button class="calc-button use" onclick="handleCalc('Use')">Use</button>
-
-                <button class="calc-button number" onclick="handleCalc('7')">7</button>
-                <button class="calc-button number" onclick="handleCalc('8')">8</button>
-                <button class="calc-button number" onclick="handleCalc('9')">9</button>
-                <button class="calc-button operator" onclick="handleCalc('×')">×</button>
-
-                <button class="calc-button number" onclick="handleCalc('4')">4</button>
-                <button class="calc-button number" onclick="handleCalc('5')">5</button>
-                <button class="calc-button number" onclick="handleCalc('6')">6</button>
-                <button class="calc-button operator" onclick="handleCalc('-')">-</button>
-
-                <button class="calc-button number" onclick="handleCalc('1')">1</button>
-                <button class="calc-button number" onclick="handleCalc('2')">2</button>
-                <button class="calc-button number" onclick="handleCalc('3')">3</button>
-                <button class="calc-button operator" onclick="handleCalc('+')">+</button>
-
-                <button class="calc-button number zero" onclick="handleCalc('0')">0</button>
-                <button class="calc-button number" onclick="handleCalc('.')">.</button>
-                <button class="calc-button equals" onclick="handleCalc('=')">=</button>
-            </div>
-            <button class="close-calc" onclick="hideCalculator()">Close</button>
-        </div>
-    </div>
-
     <div class="modal-overlay" id="confirmationModal" style="display: none;">
         <div class="modal-content">
             <p class="modal-message" id="confirmationMessage"></p>
@@ -588,9 +453,6 @@
     <script>
         let sheets = []; // Array to hold all expense sheets
         let activeSheetId = null; // ID of the currently selected sheet
-
-        let calcInput = '';
-        let calcDisplay = '0';
 
         // --- Utility Functions ---
         function generateUniqueId() {
@@ -657,6 +519,7 @@
             }
             renderSheetSelector();
             updateBalance();
+            updateMainPageTitle(); // Update title on load
         }
 
         function saveData() {
@@ -686,6 +549,7 @@
             activeSheetId = sheetId;
             saveData(); // Save active sheet preference
             updateBalance(); // Update balance for the new active sheet
+            updateMainPageTitle(); // Update title on sheet switch
             // If on transactions page, re-filter/display for new sheet
             if (document.getElementById('transactionsPage').style.display === 'block') {
                 filterTransactions();
@@ -695,6 +559,11 @@
         function createNewSheet() {
             const sheetName = prompt('Enter a name for the new expense sheet:');
             if (sheetName && sheetName.trim() !== '') {
+                // Check for duplicate names
+                if (sheets.some(sheet => sheet.name.toLowerCase() === sheetName.trim().toLowerCase())) {
+                    alert('A sheet with this name already exists. Please choose a different name.');
+                    return;
+                }
                 const newSheet = {
                     id: generateUniqueId(),
                     name: sheetName.trim(),
@@ -705,6 +574,8 @@
                 saveData();
                 renderSheetSelector();
                 switchSheet(newSheet.id); // Automatically switch to the new sheet
+            } else if (sheetName !== null) { // If user clicked OK but entered nothing
+                alert('Sheet name cannot be empty.');
             }
         }
 
@@ -759,6 +630,16 @@
             }
         }
 
+        function updateMainPageTitle() {
+            const titleEl = document.getElementById('mainPageTitle');
+            const activeSheet = getActiveSheet();
+            if (activeSheet) {
+                titleEl.textContent = activeSheet.name;
+            } else {
+                titleEl.textContent = 'No Sheet Selected';
+            }
+        }
+
         function addMoney() {
             const amountInput = document.getElementById('amount');
             const reasonInput = document.getElementById('reason');
@@ -786,12 +667,11 @@
                 activeSheet.transactions.unshift(transaction); // Add to the beginning
                 saveData();
                 updateBalance();
-                // No need to call filterTransactions here unless on transactions page
-                // It will be called if the transactions page is active
-
                 // Clear inputs
                 amountInput.value = '';
                 reasonInput.value = '';
+            } else {
+                 alert('Please enter a valid positive amount.');
             }
         }
 
@@ -822,13 +702,11 @@
                 activeSheet.transactions.unshift(transaction); // Add to the beginning
                 saveData();
                 updateBalance();
-                // No need to call filterTransactions here unless on transactions page
-
                 // Clear inputs
                 amountInput.value = '';
                 reasonInput.value = '';
             } else {
-                alert('Please enter amount and reason for spending');
+                alert('Please enter a valid positive amount and a reason for spending.');
             }
         }
 
@@ -883,6 +761,7 @@
         function showMainPage() {
             document.getElementById('mainPage').style.display = 'block';
             document.getElementById('transactionsPage').style.display = 'none';
+            updateMainPageTitle(); // Ensure title is correct when returning to main page
         }
 
         function showTransactionsPage() {
@@ -949,22 +828,8 @@
                 return;
             }
 
-            const transactionsToExport = document.getElementById('filterPeriod').value === 'all' ?
-                                         activeSheet.transactions :
-                                         Array.from(document.getElementById('transactionsList').children).map(node => {
-                                             // Reconstruct transaction object from displayed elements for image export
-                                             // This is a bit of a hack, better would be to get from filteredTransactions array
-                                             const amountText = node.querySelector('.transaction-amount').textContent;
-                                             const type = amountText.includes('+') ? 'income' : 'expense';
-                                             const amount = parseFloat(amountText.replace(/[^0-9.-]/g, ''));
-                                             const reason = node.querySelector('.transaction-reason').textContent;
-                                             const date = node.querySelector('.transaction-date').textContent.split(' at ')[0];
-                                             const time = node.querySelector('.transaction-date').textContent.split(' at ')[1];
-                                             return { type, amount, reason, date, time };
-                                         });
-
-            if (transactionsToExport.length === 0) {
-                alert("No transactions to export for the selected period.");
+            if (activeSheet.transactions.length === 0) {
+                alert("No transactions in the current sheet to export.");
                 return;
             }
 
@@ -973,7 +838,7 @@
 
             if (format === 'text') {
                 let textContent = `--- Money Tracker Transactions for "${activeSheet.name}" (${periodName}) ---\n\n`;
-                // Use the actual filtered transactions for text export
+                // Get current filtered transactions directly from `filterTransactions` logic
                 let currentFilteredTransactions = [];
                 const filterPeriod = document.getElementById('filterPeriod').value;
                 const now = new Date();
@@ -1012,6 +877,10 @@
                     });
                 }
 
+                if (currentFilteredTransactions.length === 0) {
+                    alert("No transactions to export for the selected period.");
+                    return;
+                }
 
                 currentFilteredTransactions.forEach(t => {
                     textContent += `Type: ${t.type.toUpperCase()}\n`;
@@ -1035,6 +904,11 @@
             } else if (format === 'image') {
                 const element = document.getElementById('transactionsList'); // Element to capture
 
+                if (element.children.length === 0 || element.querySelector('.empty-state')) {
+                    alert("No transactions visible to export as an image for the selected period.");
+                    return;
+                }
+
                 // Store original styles to revert later
                 const originalElementWidth = element.style.width;
                 const originalElementPadding = element.style.padding;
@@ -1044,8 +918,8 @@
 
                 // Set temporary styles for better capture
                 element.style.width = 'fit-content';
-                element.style.padding = '20px';
-                element.style.backgroundColor = '#2d3748'; // Use card background for screenshot
+                element.style.padding = '15px'; /* Consistent with card padding */
+                element.style.backgroundColor = '#333'; /* Use card background for screenshot */
                 document.querySelector('#transactionsPage .card').style.padding = '0'; // Remove card padding for direct element capture
 
                 html2canvas(element, {
@@ -1076,49 +950,7 @@
             }
         }
 
-
-        // Calculator functions
-        function showCalculator() {
-            document.getElementById('calculatorModal').style.display = 'flex';
-        }
-
-        function hideCalculator() {
-            document.getElementById('calculatorModal').style.display = 'none';
-        }
-
-        function handleCalc(value) {
-            if (value === '=') {
-                try {
-                    const result = eval(calcInput.replace(/×/g, '*').replace(/÷/g, '/'));
-                    calcDisplay = result.toString();
-                    calcInput = result.toString();
-                } catch {
-                    calcDisplay = 'Error';
-                    calcInput = '';
-                }
-            } else if (value === 'C') {
-                calcDisplay = '0';
-                calcInput = '';
-            } else if (value === '⌫') {
-                calcInput = calcInput.slice(0, -1);
-                calcDisplay = calcInput || '0';
-            } else if (value === 'Use') {
-                document.getElementById('amount').value = parseFloat(calcDisplay).toFixed(2); // Ensure it's a number and formatted
-                hideCalculator();
-                return;
-            } else {
-                if (calcInput === '0' && value !== '.') { // Prevent multiple leading zeros unless it's a decimal
-                    calcInput = value;
-                } else if (value === '.' && calcInput.includes('.')) { // Prevent multiple decimal points
-                    // Do nothing
-                } else {
-                    calcInput += value;
-                }
-                calcDisplay = calcInput;
-            }
-
-            document.getElementById('calcDisplay').textContent = calcDisplay;
-        }
+        // Removed calculator functions
 
         // --- PWA Service Worker Registration ---
         if ('serviceWorker' in navigator) {
