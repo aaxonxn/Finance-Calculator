@@ -6,7 +6,7 @@
     <title>Money Tracker</title>
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1a1a1a"> 
+    <meta name="theme-color" content="#1a1a1a">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
 
@@ -310,15 +310,6 @@
             margin-top: 8px;
         }
         /* Specific button colors for export/clear for dark theme */
-        #exportOptions .btn[onclick="exportTransactions('text')"] {
-            background-image: linear-gradient(135deg, #63b3ed 0%, #3182ce 100%); /* Blue gradient */
-            box-shadow: 0 5px 15px rgba(99, 179, 237, 0.3);
-        }
-        #exportOptions .btn[onclick="exportTransactions('text')"]:hover {
-             background-position: 100% 100%;
-             transform: translateY(-2px);
-             box-shadow: 0 8px 20px rgba(99, 179, 237, 0.4);
-        }
         #exportOptions .btn[onclick="exportTransactions('image')"] {
             background-image: linear-gradient(135deg, #5ee6a1 0%, #3bbd7c 100%); /* Green gradient */
             box-shadow: 0 5px 15px rgba(94, 230, 161, 0.3);
@@ -391,12 +382,12 @@
             box-shadow: 0 3px 10px rgba(0,0,0,0.2);
             font-weight: 600;
             margin-top: 10px; /* Space from other buttons */
-         }
+           }
          #viewAllTransactionsBtn:hover {
             background-position: 100% 100%;
             transform: translateY(-2px);
             box-shadow: 0 5px 12px rgba(0,0,0,0.3);
-         }
+           }
 
 
         /* Confirmation Modal Styles */
@@ -462,19 +453,15 @@
             background-size: 150% 150%;
             background-position: 0% 0%;
         }
-        .modal-buttons button:first-child { /* Yes button */
-            background-image: linear-gradient(135deg, #5ee6a1 0%, #3bbd7c 100%);
-            box-shadow: 0 5px 15px rgba(94, 230, 161, 0.3);
+        /* Styling for the single "OK" button */
+        #confirmOk {
+            background-image: linear-gradient(135deg, #63b3ed 0%, #3182ce 100%); /* Blue gradient for OK */
+            box-shadow: 0 5px 15px rgba(99, 179, 237, 0.3);
+            flex: 0 0 auto; /* Don't grow, take content width */
+            padding: 12px 30px; /* More padding for a single button */
+            min-width: 120px; /* Minimum width */
         }
-        .modal-buttons button:first-child:hover {
-            background-position: 100% 100%;
-            transform: translateY(-2px);
-        }
-        .modal-buttons button:last-child { /* No button */
-            background-image: linear-gradient(135deg, #ff6b6b 0%, #e04a4a 100%);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
-        }
-        .modal-buttons button:last-child:hover {
+        #confirmOk:hover {
             background-position: 100% 100%;
             transform: translateY(-2px);
         }
@@ -509,6 +496,65 @@
             transform: translateY(-2px);
         }
 
+        /* Styles for the temporary div used in image export */
+        .export-image-content {
+            background-color: #000000; /* Pure black background */
+            color: #FFFFFF; /* Default white text */
+            padding: 30px; /* Generous padding */
+            font-family: monospace, sans-serif; /* Monospace for a console-like feel */
+            font-size: 20px; /* Base font size for visibility */
+            line-height: 1.5; /* Good line height */
+            white-space: pre-wrap; /* Preserve line breaks */
+            width: 400px; /* Fixed width for the image */
+            box-sizing: border-box; /* Include padding in width */
+            text-align: left;
+        }
+        .export-image-content .export-balance-label {
+            font-size: 20px;
+            color: #DDDDDD;
+            margin-bottom: 5px;
+        }
+        .export-image-content .export-balance-final {
+            font-size: 30px; /* Larger for main balance */
+            font-weight: bold;
+            text-decoration: underline; /* Underlined as requested */
+            margin-top: 5px; /* Space after transactions */
+            margin-bottom: 20px; /* Space before transactions */
+            display: block; /* Ensure it takes full line */
+        }
+        .export-image-content .export-transaction-line {
+            display: flex; /* Use flexbox to keep content on one line */
+            align-items: baseline; /* Align items to their baselines */
+            margin-bottom: 8px; /* Space between lines */
+            overflow: hidden; /* Hide overflowing content */
+            white-space: nowrap; /* Prevent wrapping */
+        }
+        .export-image-content .export-transaction-line .positive-val,
+        .export-image-content .export-transaction-line .negative-val {
+            font-size: 24px; /* Increased font size for amount */
+            font-weight: bold; /* Make amount bold */
+            margin-right: 5px; /* Space between amount and reason */
+            flex-shrink: 0; /* Prevent amount from shrinking */
+        }
+        .export-image-content .export-transaction-line .positive-val {
+            color: #00FF00; /* Bright green */
+        }
+        .export-image-content .export-transaction-line .negative-val {
+            color: #FF0000; /* Bright red */
+        }
+        .export-image-content .export-transaction-reason {
+            color: #FFFFFF; /* White for reason text */
+            font-size: 18px; /* Slightly smaller for reason */
+            flex-grow: 1; /* Allow reason to take available space */
+            overflow: hidden; /* Hide overflow */
+            text-overflow: ellipsis; /* Add ellipsis for overflow */
+        }
+        .export-image-content .export-transaction-date-time {
+            font-size: 16px; /* Smaller for date/time */
+            color: #AAAAAA; /* Grey for date/time */
+            margin-left: 10px; /* Indent date/time */
+            flex-shrink: 0; /* Prevent date/time from shrinking */
+        }
     </style>
 </head>
 <body>
@@ -571,11 +617,12 @@
                     <option value="lastMonth">Last Month</option>
                     <option value="currentWeek">Current Week</option>
                 </select>
-                <button class="btn" onclick="exportTransactions('text')">Export as Text</button>
+
                 <button class="btn" onclick="exportTransactions('image')">Export as Image</button>
                 <button class="btn" onclick="clearAllTransactions()">Clear All Transactions</button>
             </div>
             <hr>
+
             <div id="transactionsList">
                 <div class="empty-state">
                     No transactions yet.
@@ -588,8 +635,7 @@
         <div class="modal-content">
             <p class="modal-message" id="confirmationMessage"></p>
             <div class="modal-buttons">
-                <button id="confirmYes" class="btn">Yes</button>
-                <button id="confirmNo" class="btn">No</button>
+                <button id="confirmOk" class="btn">OK</button>
             </div>
         </div>
     </div>
@@ -626,10 +672,18 @@
         let activeSheetId = null; // ID of the currently selected sheet
 
         // --- Utility Functions ---
+        /**
+         * Generates a unique ID using timestamp and a random string.
+         * @returns {string} A unique ID.
+         */
         function generateUniqueId() {
             return Date.now().toString(36) + Math.random().toString(36).substring(2);
         }
 
+        /**
+         * Retrieves the currently active expense sheet object.
+         * @returns {object|undefined} The active sheet object, or undefined if not found.
+         */
         function getActiveSheet() {
             return sheets.find(sheet => sheet.id === activeSheetId);
         }
@@ -637,27 +691,29 @@
         // --- Confirmation Modal Logic ---
         let currentConfirmationCallback = null;
 
-        function showConfirmationModal(message, onConfirmCallback) {
+        /**
+         * Displays a confirmation modal with a given message and sets an optional callback for user's acknowledgment.
+         * @param {string} message - The message to display in the modal.
+         * @param {function(): void} [onOkCallback] - Optional callback function to execute after user clicks OK.
+         */
+        function showConfirmationModal(message, onOkCallback) {
             document.getElementById('confirmationMessage').textContent = message;
             document.getElementById('confirmationModal').classList.add('active');
-            currentConfirmationCallback = onConfirmCallback;
+            currentConfirmationCallback = onOkCallback;
         }
 
+        /**
+         * Hides the confirmation modal.
+         */
         function hideConfirmationModal() {
             document.getElementById('confirmationModal').classList.remove('active');
             currentConfirmationCallback = null;
         }
 
-        document.getElementById('confirmYes').onclick = () => {
+        // Event listener for confirmation modal's OK button
+        document.getElementById('confirmOk').onclick = () => {
             if (currentConfirmationCallback) {
-                currentConfirmationCallback(true);
-            }
-            hideConfirmationModal();
-        };
-
-        document.getElementById('confirmNo').onclick = () => {
-            if (currentConfirmationCallback) {
-                currentConfirmationCallback(false);
+                currentConfirmationCallback(); // No 'true' or 'false' needed for OK-only
             }
             hideConfirmationModal();
         };
@@ -665,12 +721,16 @@
         // --- Edit Transaction Modal Logic ---
         let currentEditingTransactionId = null;
 
+        /**
+         * Displays the edit transaction modal populated with the transaction's data.
+         * @param {object} transaction - The transaction object to be edited.
+         */
         function showEditTransactionModal(transaction) {
             currentEditingTransactionId = transaction.id;
             document.getElementById('editAmount').value = transaction.amount.toFixed(2);
             document.getElementById('editReason').value = transaction.reason;
 
-            // Set date and time inputs
+            // Set date and time inputs from the transaction's timestamp
             const tDate = new Date(transaction.timestamp);
             const year = tDate.getFullYear();
             const month = (tDate.getMonth() + 1).toString().padStart(2, '0');
@@ -684,45 +744,53 @@
             document.getElementById('editTransactionModal').classList.add('active');
         }
 
+        /**
+         * Hides the edit transaction modal.
+         */
         function hideEditTransactionModal() {
             document.getElementById('editTransactionModal').classList.remove('active');
             currentEditingTransactionId = null;
         }
 
+        // Event listener for save button in edit modal
         document.getElementById('saveEditBtn').onclick = () => {
             const activeSheet = getActiveSheet();
-            if (!activeSheet || !currentEditingTransactionId) return;
+            if (!activeSheet || !currentEditingTransactionId) {
+                console.error("No active sheet or transaction ID for editing.");
+                return;
+            }
 
             const newAmount = parseFloat(document.getElementById('editAmount').value);
             const newReason = document.getElementById('editReason').value.trim();
             const newDateStr = document.getElementById('editDate').value;
             const newTimeStr = document.getElementById('editTime').value;
 
+            // Input validation
             if (isNaN(newAmount) || newAmount <= 0) {
-                alert('Please enter a valid positive amount.');
+                showConfirmationModal('Please enter a valid positive amount.');
                 return;
             }
             if (!newReason) {
-                alert('Reason cannot be empty.');
+                showConfirmationModal('Reason cannot be empty.');
                 return;
             }
             if (!newDateStr || !newTimeStr) {
-                alert('Date and time are required.');
+                showConfirmationModal('Date and time are required.');
                 return;
             }
 
             const oldTransactionIndex = activeSheet.transactions.findIndex(t => t.id === currentEditingTransactionId);
             if (oldTransactionIndex === -1) {
-                alert('Transaction not found!');
+                showConfirmationModal('Transaction not found!');
                 return;
             }
 
             const oldTransaction = activeSheet.transactions[oldTransactionIndex];
 
-            // Re-calculate balance based on old and new amounts/types
+            // Re-calculate balance: remove old transaction's impact, then add new transaction's impact
             if (oldTransaction.type === 'income') {
                 activeSheet.balance -= oldTransaction.amount;
-            } else {
+            } else { // expense
                 activeSheet.balance += oldTransaction.amount;
             }
 
@@ -731,7 +799,7 @@
 
             const updatedTransaction = {
                 id: oldTransaction.id,
-                type: oldTransaction.type, // Type remains the same
+                type: oldTransaction.type, // Type (income/expense) remains the same after editing
                 amount: newAmount,
                 reason: newReason,
                 timestamp: newTimestamp,
@@ -739,41 +807,54 @@
                 time: new Date(newTimestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
             };
 
+            // Apply new transaction's impact to balance
             if (updatedTransaction.type === 'income') {
                 activeSheet.balance += updatedTransaction.amount;
-            } else {
+            } else { // expense
                 activeSheet.balance -= updatedTransaction.amount;
             }
 
             activeSheet.transactions[oldTransactionIndex] = updatedTransaction; // Replace old with updated
-            activeSheet.transactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // Re-sort by date
-            
+            activeSheet.transactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // Re-sort by date (most recent first)
+
             saveData();
             updateBalance();
             filterTransactions(); // Re-render transactions with updated data
             hideEditTransactionModal();
-            alert('Transaction updated successfully!');
+            showConfirmationModal('Transaction updated successfully!');
         };
 
+        // Event listener for cancel button in edit modal
         document.getElementById('cancelEditBtn').onclick = () => {
             hideEditTransactionModal();
         };
 
 
         // --- Data Persistence ---
+        /**
+         * Loads sheets and active sheet ID from local storage. Initializes a default sheet if none exist.
+         */
         function loadData() {
             const savedSheets = localStorage.getItem('moneyTrackerSheets');
             const savedActiveSheetId = localStorage.getItem('moneyTrackerActiveSheetId');
 
             if (savedSheets) {
                 sheets = JSON.parse(savedSheets);
+                // Ensure all loaded sheets have initialSheetBalance for backward compatibility
+                sheets.forEach(sheet => {
+                    if (typeof sheet.initialSheetBalance === 'undefined') {
+                        // For existing sheets created before this feature, set initial balance to their current balance
+                        sheet.initialSheetBalance = sheet.balance;
+                    }
+                });
             } else {
                 // Create a default sheet if none exist
                 const defaultSheet = {
                     id: generateUniqueId(),
                     name: 'My Main Expenses',
                     balance: 0,
-                    transactions: []
+                    transactions: [],
+                    initialSheetBalance: 0 // Initialize for new sheets
                 };
                 sheets.push(defaultSheet);
             }
@@ -783,20 +864,35 @@
             } else if (sheets.length > 0) {
                 activeSheetId = sheets[0].id; // Set first sheet as active if no saved ID or invalid
             } else {
-                // This case should ideally not happen if default sheet is created
-                console.error("No active sheet could be determined.");
+                console.error("No active sheet could be determined after loading/initializing.");
+                // Fallback: If for some reason sheets is still empty, create a new default.
+                const fallbackSheet = {
+                    id: generateUniqueId(),
+                    name: 'Default Sheet',
+                    balance: 0,
+                    transactions: [],
+                    initialSheetBalance: 0
+                };
+                sheets.push(fallbackSheet);
+                activeSheetId = fallbackSheet.id;
             }
             renderSheetSelector();
             updateBalance();
             updateMainPageTitle(); // Update title on load
         }
 
+        /**
+         * Saves the current sheets array and active sheet ID to local storage.
+         */
         function saveData() {
             localStorage.setItem('moneyTrackerSheets', JSON.stringify(sheets));
             localStorage.setItem('moneyTrackerActiveSheetId', activeSheetId);
         }
 
         // --- Sheet Management ---
+        /**
+         * Renders (or re-renders) the sheet selection dropdown.
+         */
         function renderSheetSelector() {
             const selector = document.getElementById('sheetSelector');
             selector.innerHTML = ''; // Clear existing options
@@ -814,79 +910,124 @@
             }
         }
 
+        /**
+         * Switches the active expense sheet.
+         * @param {string} sheetId - The ID of the sheet to switch to.
+         */
         function switchSheet(sheetId) {
             activeSheetId = sheetId;
             saveData(); // Save active sheet preference
             updateBalance(); // Update balance for the new active sheet
             updateMainPageTitle(); // Update title on sheet switch
-            // If on transactions page, re-filter/display for new sheet
+            // If currently on transactions page, re-filter/display for the new sheet
             if (document.getElementById('transactionsPage').style.display === 'block') {
                 filterTransactions();
             }
         }
 
+        /**
+         * Prompts the user for a new sheet name and initial balance, then creates a new expense sheet.
+         */
         function createNewSheet() {
             const sheetName = prompt('Enter a name for the new expense sheet:');
-            if (sheetName && sheetName.trim() !== '') {
-                // Check for duplicate names
-                if (sheets.some(sheet => sheet.name.toLowerCase() === sheetName.trim().toLowerCase())) {
-                    alert('A sheet with this name already exists. Please choose a different name.');
+            if (sheetName !== null) { // User did not click cancel for sheet name
+                if (sheetName.trim() === '') {
+                    showConfirmationModal('Sheet name cannot be empty.');
                     return;
                 }
+                // Check for duplicate names (case-insensitive)
+                if (sheets.some(sheet => sheet.name.toLowerCase() === sheetName.trim().toLowerCase())) {
+                    showConfirmationModal('A sheet with this name already exists. Please choose a different name.');
+                    return;
+                }
+
+                let startingAmount = prompt(`Enter the initial balance for "${sheetName.trim()}":`, '0.00');
+                if (startingAmount === null) { // User clicked cancel for amount
+                    return; // Abort sheet creation
+                }
+                startingAmount = parseFloat(startingAmount);
+
+                if (isNaN(startingAmount)) {
+                    showConfirmationModal('Invalid amount. Please enter a valid number for the initial balance.');
+                    return;
+                }
+
                 const newSheet = {
                     id: generateUniqueId(),
                     name: sheetName.trim(),
-                    balance: 0,
-                    transactions: []
+                    balance: startingAmount, // Set sheet's balance directly
+                    transactions: [],
+                    initialSheetBalance: startingAmount // Store the initial balance for export
                 };
                 sheets.push(newSheet);
                 saveData();
                 renderSheetSelector();
                 switchSheet(newSheet.id); // Automatically switch to the new sheet
-            } else if (sheetName !== null) { // If user clicked OK but entered nothing
-                alert('Sheet name cannot be empty.');
+                showConfirmationModal(`New sheet "${newSheet.name}" created with an initial balance of ₹${newSheet.balance.toFixed(2)}.`);
             }
         }
 
+        /**
+         * Deletes the currently active expense sheet after user confirmation.
+         * Prevents deletion if it's the last remaining sheet.
+         */
         function deleteActiveSheet() {
-            if (sheets.length <= 1) {
-                alert('Cannot delete the last expense sheet. Please create another one first.');
-                return;
-            }
-
             const activeSheet = getActiveSheet();
-            showConfirmationModal(`Are you sure you want to delete the sheet "${activeSheet.name}" and all its transactions? This cannot be undone.`, (confirmed) => {
-                if (confirmed) {
-                    sheets = sheets.filter(sheet => sheet.id !== activeSheetId);
-                    // Set a new active sheet (e.g., the first one available)
-                    activeSheetId = sheets[0].id;
-                    saveData();
-                    renderSheetSelector();
-                    switchSheet(activeSheetId); // Switch to the new active sheet
+            // Use the callback to decide after confirmation.
+            showConfirmationModal(`Are you sure you want to delete the sheet "${activeSheet.name}" and all its transactions? This cannot be undone.`, () => {
+                if (sheets.length <= 1) {
+                    showConfirmationModal('Cannot delete the last expense sheet. Please create another one first.');
+                    return;
                 }
+                sheets = sheets.filter(sheet => sheet.id !== activeSheetId);
+                // Set a new active sheet (e.g., the first one available)
+                activeSheetId = sheets.length > 0 ? sheets[0].id : null;
+
+                // If no sheets left after deletion (shouldn't happen with current logic but good for robustness)
+                if (activeSheetId === null) {
+                    const defaultSheet = {
+                        id: generateUniqueId(),
+                        name: 'My Main Expenses',
+                        balance: 0,
+                        transactions: [],
+                        initialSheetBalance: 0
+                    };
+                    sheets.push(defaultSheet);
+                    activeSheetId = defaultSheet.id;
+                }
+
+                saveData();
+                renderSheetSelector();
+                switchSheet(activeSheetId); // Switch to the new active sheet
             });
         }
 
+        /**
+         * Clears all transactions from the active sheet and resets its balance.
+         * Requires user confirmation.
+         */
         function clearAllTransactions() {
             const activeSheet = getActiveSheet();
             if (!activeSheet || activeSheet.transactions.length === 0) {
-                alert('No transactions to clear in the current sheet.');
+                showConfirmationModal('No transactions to clear in the current sheet.');
                 return;
             }
 
-            showConfirmationModal(`Are you sure you want to clear ALL transactions in "${activeSheet.name}"? This cannot be undone.`, (confirmed) => {
-                if (confirmed) {
-                    activeSheet.transactions = [];
-                    activeSheet.balance = 0;
-                    saveData();
-                    updateBalance();
-                    filterTransactions(); // Refresh display
-                    alert('All transactions cleared for the current sheet!');
-                }
+            showConfirmationModal(`Are you sure you want to clear ALL transactions in "${activeSheet.name}"? This cannot be undone.`, () => {
+                activeSheet.transactions = [];
+                // Reset balance to the sheet's initial balance when clearing transactions
+                activeSheet.balance = activeSheet.initialSheetBalance;
+                saveData();
+                updateBalance();
+                filterTransactions(); // Refresh display
+                showConfirmationModal('All transactions cleared for the current sheet!');
             });
         }
 
         // --- Core Money Tracker Logic (adapted for sheets) ---
+        /**
+         * Updates the displayed balance and its color based on the active sheet's balance.
+         */
         function updateBalance() {
             const balanceEl = document.getElementById('balance');
             const activeSheet = getActiveSheet();
@@ -899,6 +1040,9 @@
             }
         }
 
+        /**
+         * Updates the main page title with the name of the active sheet.
+         */
         function updateMainPageTitle() {
             const titleEl = document.getElementById('mainPageTitle');
             const activeSheet = getActiveSheet();
@@ -909,15 +1053,18 @@
             }
         }
 
+        /**
+         * Adds an income transaction to the active sheet.
+         */
         function addMoney() {
             const amountInput = document.getElementById('amount');
             const reasonInput = document.getElementById('reason');
             const amount = parseFloat(amountInput.value);
-            const reason = reasonInput.value || 'Money added';
+            const reason = reasonInput.value || 'Money added'; // Default reason if empty
             const activeSheet = getActiveSheet();
 
             if (!activeSheet) {
-                alert('No active sheet selected. Please create or select a sheet.');
+                showConfirmationModal('No active sheet selected. Please create or select a sheet.');
                 return;
             }
 
@@ -928,32 +1075,35 @@
                     type: 'income',
                     amount: amount,
                     reason: reason,
-                    timestamp: now.toISOString(),
+                    timestamp: now.toISOString(), // ISO string for precise date/time comparison
                     date: now.toLocaleDateString('en-GB'),
                     time: now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
                 };
 
                 activeSheet.balance += amount;
-                activeSheet.transactions.unshift(transaction); // Add to the beginning
+                activeSheet.transactions.unshift(transaction); // Add to the beginning (most recent first in array)
                 saveData();
                 updateBalance();
                 // Clear inputs
                 amountInput.value = '';
                 reasonInput.value = '';
             } else {
-                alert('Please enter a valid positive amount.');
+                showConfirmationModal('Please enter a valid positive amount.');
             }
         }
 
+        /**
+         * Adds an expense transaction to the active sheet.
+         */
         function subtractMoney() {
             const amountInput = document.getElementById('amount');
             const reasonInput = document.getElementById('reason');
             const amount = parseFloat(amountInput.value);
-            const reason = reasonInput.value.trim();
+            const reason = reasonInput.value.trim(); // Reason is required for spending
             const activeSheet = getActiveSheet();
 
             if (!activeSheet) {
-                alert('No active sheet selected. Please create or select a sheet.');
+                showConfirmationModal('No active sheet selected. Please create or select a sheet.');
                 return;
             }
 
@@ -977,35 +1127,44 @@
                 amountInput.value = '';
                 reasonInput.value = '';
             } else {
-                alert('Please enter a valid positive amount and a reason for spending.');
+                showConfirmationModal('Please enter a valid positive amount and a reason for spending.');
             }
         }
 
+        /**
+         * Deletes a specific transaction after user confirmation.
+         * Adjusts the balance accordingly.
+         * @param {string} id - The ID of the transaction to delete.
+         */
         function deleteTransaction(id) {
-            showConfirmationModal('Are you sure you want to delete this transaction?', (confirmed) => {
-                if (confirmed) {
-                    const activeSheet = getActiveSheet();
-                    if (!activeSheet) return;
+            showConfirmationModal('Are you sure you want to delete this transaction?', () => {
+                const activeSheet = getActiveSheet();
+                if (!activeSheet) {
+                    console.error("No active sheet to delete transaction from.");
+                    return;
+                }
 
-                    const transactionIndex = activeSheet.transactions.findIndex(t => t.id === id);
-                    if (transactionIndex > -1) {
-                        const transaction = activeSheet.transactions[transactionIndex];
-                        if (transaction.type === 'income') {
-                            activeSheet.balance -= transaction.amount;
-                        } else {
-                            activeSheet.balance += transaction.amount;
-                        }
-
-                        activeSheet.transactions.splice(transactionIndex, 1); // Remove transaction
-                        saveData();
-                        updateBalance();
-                        filterTransactions(); // Re-filter and update display after deletion
+                const transactionIndex = activeSheet.transactions.findIndex(t => t.id === id);
+                if (transactionIndex > -1) {
+                    const transaction = activeSheet.transactions[transactionIndex];
+                    if (transaction.type === 'income') {
+                        activeSheet.balance -= transaction.amount;
+                    } else { // expense
+                        activeSheet.balance += transaction.amount;
                     }
+
+                    activeSheet.transactions.splice(transactionIndex, 1); // Remove transaction
+                    saveData();
+                    updateBalance();
+                    filterTransactions(); // Re-filter and update display after deletion
                 }
             });
         }
 
-        // Update transaction history display (now accepts an array to display)
+        /**
+         * Updates the transaction history display on the transactions page.
+         * @param {Array<object>} transactionsToDisplay - The array of transaction objects to render.
+         */
         function updateTransactionHistory(transactionsToDisplay) {
             const container = document.getElementById('transactionsList');
 
@@ -1032,12 +1191,19 @@
         }
 
         // --- Page Navigation Functions ---
+        /**
+         * Shows the main money tracker page and hides the transactions page.
+         */
         function showMainPage() {
             document.getElementById('mainPage').style.display = 'flex'; // Use flex for proper centering
             document.getElementById('transactionsPage').style.display = 'none';
             updateMainPageTitle(); // Ensure title is correct when returning to main page
         }
 
+        /**
+         * Shows the transactions history page and hides the main page.
+         * Triggers a filter to display relevant transactions.
+         */
         function showTransactionsPage() {
             document.getElementById('mainPage').style.display = 'none';
             document.getElementById('transactionsPage').style.display = 'block';
@@ -1045,6 +1211,10 @@
         }
 
         // --- Transaction Filtering ---
+        /**
+         * Filters transactions based on the selected period (All Time, Current Month, Last Month, Current Week).
+         * Updates the displayed transaction history.
+         */
         function filterTransactions() {
             const filterPeriod = document.getElementById('filterPeriod').value;
             const now = new Date();
@@ -1070,8 +1240,8 @@
                 let lastMonth = now.getMonth() - 1;
                 let lastMonthYear = now.getFullYear();
                 if (lastMonth < 0) {
-                    lastMonth = 11;
-                    lastMonthYear--;
+                    lastMonth = 11; // December
+                    lastMonthYear--; // Previous year
                 }
                 filtered = transactionsToFilter.filter(t => {
                     const tDate = new Date(t.timestamp);
@@ -1079,31 +1249,37 @@
                 });
             } else if (filterPeriod === 'currentWeek') {
                 const startOfWeek = new Date(now);
-                startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday is 0
-                startOfWeek.setHours(0,0,0,0);
+                startOfWeek.setDate(now.getDate() - now.getDay()); // Adjust to Sunday (start of week)
+                startOfWeek.setHours(0,0,0,0); // Set to beginning of the day
+
                 const endOfWeek = new Date(startOfWeek);
-                endOfWeek.setDate(startOfWeek.getDate() + 6);
-                endOfWeek.setHours(23,59,59,999);
+                endOfWeek.setDate(startOfWeek.getDate() + 6); // End of week (Saturday)
+                endOfWeek.setHours(23,59,59,999); // Set to end of the day
 
                 filtered = transactionsToFilter.filter(t => {
                     const tDate = new Date(t.timestamp);
                     return tDate >= startOfWeek && tDate <= endOfWeek;
                 });
             }
-            // Sort by timestamp in descending order (most recent first)
+            // Always sort by timestamp in descending order (most recent first) for display on history page
             filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             updateTransactionHistory(filtered); // Display the filtered transactions
         }
 
         // --- Export Functions ---
+        /**
+         * Exports transactions in a specified format (currently 'image').
+         * For image export, it generates a visual summary of filtered transactions.
+         * @param {string} format - The desired export format (e.g., 'image').
+         */
         function exportTransactions(format) {
             const activeSheet = getActiveSheet();
             if (!activeSheet) {
-                alert("No active sheet selected to export from.");
+                showConfirmationModal("No active sheet selected to export from.");
                 return;
             }
 
-            // Get current filtered transactions directly from `filterTransactions` logic
+            // Get current filtered transactions using the same logic as filterTransactions()
             let currentFilteredTransactions = [];
             const filterPeriod = document.getElementById('filterPeriod').value;
             const now = new Date();
@@ -1143,126 +1319,84 @@
                 });
             }
 
-            // Sort by timestamp for consistent export order
-            currentFilteredTransactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            // --- IMPORTANT CHANGE: Sort by timestamp in ASCENDING order (oldest first) for image export ---
+            currentFilteredTransactions.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
 
             if (currentFilteredTransactions.length === 0) {
-                alert("No transactions to export for the selected period.");
+                showConfirmationModal("No transactions to export for the selected period.");
                 return;
             }
 
             const periodName = document.getElementById('filterPeriod').options[document.getElementById('filterPeriod').selectedIndex].text;
             const fileName = `transactions_${activeSheet.name.replace(/\s+/g, '_')}_${periodName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}`;
 
-
-            if (format === 'text') {
-                let textContent = `--- Money Tracker Transactions for "${activeSheet.name}" (${periodName}) ---\n\n`;
-
-                currentFilteredTransactions.forEach(t => {
-                    textContent += `Type: ${t.type.toUpperCase()}\n`;
-                    textContent += `Amount: ₹${t.amount.toFixed(2)}\n`;
-                    textContent += `Reason: ${t.reason}\n`;
-                    textContent += `Date: ${t.date} at ${t.time}\n`;
-                    textContent += `---\n`;
-                });
-
-                const blob = new Blob([textContent], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `${fileName}.txt`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                alert('Transactions exported as text!');
-
-            } else if (format === 'image') {
-                const element = document.getElementById('transactionsList'); // Element to capture
-
-                if (element.children.length === 0 || element.querySelector('.empty-state')) {
-                    alert("No transactions visible to export as an image for the selected period.");
-                    return;
-                }
-
-                // Temporarily clone the element to capture only the visible filtered transactions
-                // and apply necessary styles for a better screenshot.
+            // --- IMAGE EXPORT LOGIC (Modified) ---
+            if (format === 'image') {
+                // Create a temporary div to render content for the image
                 const tempDiv = document.createElement('div');
-                tempDiv.style.background = '#2a2a2a'; // Match card background
-                tempDiv.style.padding = '25px';
-                tempDiv.style.borderRadius = '20px';
-                tempDiv.style.fontFamily = "'Lato', sans-serif";
-                tempDiv.style.color = '#e0e6eb';
-                tempDiv.style.width = '100%'; // Ensure it takes full width for capture
-                tempDiv.style.boxSizing = 'border-box'; // Include padding in width
+                tempDiv.className = 'export-image-content';
 
-                // Add a title to the image
-                const titleHeading = document.createElement('h2');
-                titleHeading.textContent = `Transactions for "${activeSheet.name}" (${periodName})`;
-                titleHeading.style.fontFamily = "'Montserrat', sans-serif";
-                titleHeading.style.fontSize = '20px';
-                titleHeading.style.fontWeight = '700';
-                titleHeading.style.color = '#f8f9fa';
-                titleHeading.style.marginBottom = '20px';
-                titleHeading.style.textAlign = 'center';
-                tempDiv.appendChild(titleHeading);
+                // Displaying the Initial Sheet Balance
+                const initialBalanceLabel = document.createElement('span');
+                initialBalanceLabel.className = 'export-balance-label';
+                initialBalanceLabel.textContent = `Initial Balance:`;
+                tempDiv.appendChild(initialBalanceLabel);
 
-                // Add each transaction as a styled div
+                const initialBalanceValue = document.createElement('span');
+                initialBalanceValue.className = 'export-balance-final';
+                // Use the initialSheetBalance directly from the active sheet
+                initialBalanceValue.textContent = `₹${(activeSheet.initialSheetBalance !== undefined ? activeSheet.initialSheetBalance : 0).toFixed(2)}`;
+                initialBalanceValue.style.fontSize = '24px'; // Slightly smaller than final balance
+                initialBalanceValue.style.textDecoration = 'none'; // Not underlined for initial balance
+                initialBalanceValue.style.marginBottom = '20px'; // Space before transactions
+                tempDiv.appendChild(initialBalanceValue);
+
+
+                // Add a separator or title for transactions
+                const transactionsTitle = document.createElement('h3');
+                transactionsTitle.textContent = "--- Transactions ---";
+                transactionsTitle.style.textAlign = "center";
+                transactionsTitle.style.margin = "20px 0";
+                transactionsTitle.style.color = "#bbbbbb"; // Slightly lighter color
+                transactionsTitle.style.fontSize = "22px";
+                tempDiv.appendChild(transactionsTitle);
+
+
+                // Add each transaction line
                 currentFilteredTransactions.forEach(t => {
-                    const transactionDiv = document.createElement('div');
-                    transactionDiv.className = `transaction ${t.type}`;
-                    transactionDiv.style.cssText = `
-                        background: #333333;
-                        padding: 15px;
-                        border-radius: 12px;
-                        margin-bottom: 10px;
-                        border-left: 5px solid ${t.type === 'income' ? '#5ee6a1' : '#ff6b6b'};
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        font-size: 14px;
-                        box-sizing: border-box;
-                    `;
+                    const transactionLine = document.createElement('span');
+                    transactionLine.className = 'export-transaction-line';
 
-                    const infoDiv = document.createElement('div');
-                    infoDiv.style.flex = '1';
-                    infoDiv.style.paddingRight = '15px';
+                    const amountSpan = document.createElement('span');
+                    amountSpan.textContent = `${t.type === 'income' ? '+' : '-'}₹${t.amount.toFixed(2)}`; // Keep 2 decimal places for amount
+                    amountSpan.className = t.type === 'income' ? 'positive-val' : 'negative-val';
+                    transactionLine.appendChild(amountSpan);
 
-                    const amountDiv = document.createElement('div');
-                    amountDiv.className = `transaction-amount ${t.type === 'income' ? 'positive' : 'negative'}`;
-                    amountDiv.style.cssText = `
-                        font-size: 17px;
-                        font-weight: 700;
-                        margin-bottom: 6px;
-                        font-family: 'Montserrat', sans-serif;
-                        color: ${t.type === 'income' ? '#5ee6a1' : '#ff6b6b'};
-                    `;
-                    amountDiv.textContent = `${t.type === 'income' ? '+' : '-'}₹${t.amount.toFixed(2)}`;
+                    const reasonSpan = document.createElement('span');
+                    reasonSpan.className = 'export-transaction-reason';
+                    reasonSpan.textContent = ` ${t.reason}`; // No parentheses, just space
+                    transactionLine.appendChild(reasonSpan);
 
-                    const reasonDiv = document.createElement('div');
-                    reasonDiv.className = 'transaction-reason';
-                    reasonDiv.style.cssText = `
-                        font-size: 14px;
-                        color: #bbccdd;
-                        margin-bottom: 4px;
-                    `;
-                    reasonDiv.textContent = t.reason;
+                    const dateSpan = document.createElement('span');
+                    dateSpan.className = 'export-transaction-date-time';
+                    dateSpan.textContent = ` (${t.date})`; // Only date, no time
+                    transactionLine.appendChild(dateSpan);
 
-                    const dateDiv = document.createElement('div');
-                    dateDiv.className = 'transaction-date';
-                    dateDiv.style.cssText = `
-                        font-size: 12px;
-                        color: #9aa5b1;
-                    `;
-                    dateDiv.textContent = `${t.date} at ${t.time}`;
-
-                    infoDiv.appendChild(amountDiv);
-                    infoDiv.appendChild(reasonDiv);
-                    infoDiv.appendChild(dateDiv);
-                    transactionDiv.appendChild(infoDiv);
-                    tempDiv.appendChild(transactionDiv);
+                    tempDiv.appendChild(transactionLine);
                 });
+
+                // Final balance line (after transactions)
+                const finalBalanceLabel = document.createElement('span');
+                finalBalanceLabel.className = 'export-balance-label';
+                finalBalanceLabel.textContent = `Current Balance:`;
+                finalBalanceLabel.style.marginTop = '20px'; // Space before final balance label
+                tempDiv.appendChild(finalBalanceLabel);
+
+                const finalBalanceSpan = document.createElement('span');
+                finalBalanceSpan.className = 'export-balance-final';
+                finalBalanceSpan.textContent = `₹${activeSheet.balance.toFixed(2)}`; // Use the actual current balance
+                tempDiv.appendChild(finalBalanceSpan);
 
                 document.body.appendChild(tempDiv); // Append to body temporarily for html2canvas to capture
 
@@ -1281,10 +1415,10 @@
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
-                    alert('Transactions exported as image!');
+                    showConfirmationModal('Transactions exported as image!');
                 }).catch(err => {
                     console.error('Error exporting as image:', err);
-                    alert('Failed to export as image. Please check console for details.');
+                    showConfirmationModal('Failed to export as image. Please check console for details.');
                     if (tempDiv.parentNode) { // Ensure to remove tempDiv even on error
                         document.body.removeChild(tempDiv);
                     }
