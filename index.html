@@ -6,10 +6,13 @@
     <title>Money Tracker</title>
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000"> <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <meta name="theme-color" content="#1a1a1a"> 
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+
 
     <style>
-        /* General Reset & Body for Black Theme */
+        /* General Reset & Body for Refined Dark Theme */
         * {
             margin: 0;
             padding: 0;
@@ -17,265 +20,328 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: black; /* Pure black background */
-            color: #e2e8f0; /* Light text for contrast */
+            font-family: 'Lato', sans-serif; /* Body text font */
+            background: #1a1a1a; /* Very dark grey, slightly off-black */
+            color: #e0e6eb; /* Light text for contrast */
             min-height: 100vh;
-            padding: 10px; /* Reduced padding for smaller tiles */
+            padding: 20px; /* More generous padding */
+            display: flex; /* For centering content */
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
         }
 
         .container {
-            max-width: 400px;
+            max-width: 420px; /* Slightly wider container */
+            width: 100%;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Consistent spacing between cards */
         }
 
-        /* Card Styles for Grey Tiles */
+        /* Card Styles for Richer Dark Tiles */
         .card {
-            background: #333; /* Dark grey for cards */
-            border-radius: 15px; /* Slightly smaller border-radius */
-            padding: 15px; /* Reduced padding for smaller tiles */
-            margin-bottom: 10px; /* Reduced margin for smaller tiles */
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5); /* Stronger shadow for depth on black */
+            background: #2a2a2a; /* Richer dark grey for cards */
+            border-radius: 20px; /* More rounded corners */
+            padding: 25px; /* More generous padding */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4); /* Softer, more diffused shadow */
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-3px); /* Subtle lift on hover */
         }
 
         .header {
             text-align: center;
-            margin-bottom: 15px; /* Slightly reduced margin */
+            margin-bottom: 20px;
         }
 
         /* Dynamic Title Styling */
         .title {
-            font-size: 26px; /* Slightly smaller font for title */
-            font-weight: bold;
-            color: #edf2f7; /* Lighter title color */
-            margin-bottom: 10px; /* Slightly reduced margin */
-            overflow: hidden; /* Prevent text overflow */
-            text-overflow: ellipsis; /* Add ellipsis if text overflows */
-            white-space: nowrap; /* Keep text on single line */
-            padding: 0 5px; /* Little padding to prevent sticking to edge */
+            font-family: 'Montserrat', sans-serif; /* Heading font */
+            font-size: 28px; /* Prominent title size */
+            font-weight: 700;
+            color: #f8f9fa; /* Almost white for title */
+            margin-bottom: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0 5px;
         }
 
         .balance-label {
-            font-size: 13px; /* Slightly smaller font */
-            color: #a0aec0; /* Subtler label color */
-            margin-bottom: 5px; /* Reduced margin */
+            font-size: 14px;
+            color: #9aa5b1; /* Subtler label color */
+            margin-bottom: 8px;
         }
 
         .balance {
-            font-size: 34px; /* Slightly smaller font */
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 40px; /* Larger, more impactful balance */
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif; /* Use heading font for balance */
         }
 
-        /* Amount Colors (Same as before, good contrast on dark) */
-        .positive { color: #38a169; } /* Slightly softer green */
-        .negative { color: #e53e3e; } /* Slightly softer red */
+        /* Amount Colors (Refined) */
+        .positive { color: #5ee6a1; } /* A vibrant, but not neon, green */
+        .negative { color: #ff6b6b; } /* A slightly muted, but clear red */
 
         /* Input Fields */
         .input-group {
-            margin-bottom: 10px; /* Reduced margin */
+            margin-bottom: 15px; /* More spacing */
         }
 
         .input-row {
             display: flex;
-            gap: 10px;
+            gap: 12px; /* Increased gap */
             align-items: center;
         }
 
-        input {
+        input[type="number"],
+        input[type="text"],
+        input[type="date"],
+        input[type="time"] {
             width: 100%;
-            padding: 12px; /* Reduced padding */
-            border: 2px solid #555; /* Darker border */
-            border-radius: 10px; /* Slightly smaller border-radius */
-            font-size: 15px; /* Slightly smaller font */
-            background: #444; /* Darker background for input */
-            color: #e2e8f0; /* Light text */
+            padding: 14px; /* Increased padding */
+            border: 2px solid #4a4a4a; /* Darker, more substantial border */
+            border-radius: 12px; /* More rounded corners */
+            font-size: 16px;
+            background: #3a3a3a; /* Darker background for input */
+            color: #e0e6eb;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         input::placeholder {
-            color: #a0aec0; /* Lighter placeholder text */
+            color: #8c98a6; /* Lighter, more readable placeholder */
         }
 
         input:focus {
             border-color: #63b3ed; /* Accent blue on focus */
+            box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.3); /* Subtle glow on focus */
+            background-color: #3f3f3f; /* Slightly lighter on focus */
         }
-
-        /* Removed .calc-btn and related styles */
 
         /* Buttons */
         .button-row {
             display: flex;
-            gap: 10px; /* Reduced gap */
-            margin-top: 15px; /* Reduced margin */
+            gap: 12px; /* Increased gap */
+            margin-top: 20px;
         }
 
         .btn {
             flex: 1;
-            padding: 12px; /* Reduced padding */
+            padding: 14px 18px; /* Generous padding */
             border: none;
-            border-radius: 10px; /* Slightly smaller border-radius */
-            font-size: 15px; /* Slightly smaller font */
-            font-weight: 600;
+            border-radius: 12px; /* More rounded corners */
+            font-size: 16px;
+            font-weight: 700; /* Bolder text */
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s ease-in-out;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px; /* More space for icons */
             text-align: center;
             color: white; /* All main buttons will have white text */
+            background-size: 150% 150%; /* For gradient hover effect */
+            background-position: 0% 0%; /* Start gradient from top-left */
         }
 
         .btn:disabled {
-            opacity: 0.5;
+            opacity: 0.6;
             cursor: not-allowed;
+            background: #4a4a4a !important; /* Muted disabled background */
+            box-shadow: none !important;
+            transform: none !important;
         }
 
         .btn-add {
-            background: #38a169; /* Green for add */
+            background-image: linear-gradient(135deg, #5ee6a1 0%, #3bbd7c 100%); /* Green gradient */
+            box-shadow: 0 5px 15px rgba(94, 230, 161, 0.3);
         }
 
         .btn-add:hover:not(:disabled) {
-            background: #2f855a;
+            background-position: 100% 100%; /* Shift gradient on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(94, 230, 161, 0.4);
         }
 
         .btn-spend {
-            background: #e53e3e; /* Red for spend/delete */
+            background-image: linear-gradient(135deg, #ff6b6b 0%, #e04a4a 100%); /* Red gradient */
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
         }
 
         .btn-spend:hover:not(:disabled) {
-            background: #c53030;
+            background-position: 100% 100%;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
         }
 
         /* History Title */
         .history-title {
-            font-size: 18px; /* Slightly smaller font */
-            font-weight: 600;
-            color: #edf2f7; /* Lighter title */
-            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #f8f9fa;
+            margin-bottom: 20px;
         }
 
         /* Transaction Items */
         .transaction {
-            padding: 12px; /* Reduced padding */
-            border-radius: 10px; /* Slightly smaller border-radius */
-            margin-bottom: 8px; /* Reduced margin */
-            border-left: 4px solid;
+            background: #333333; /* Slightly lighter card for transactions */
+            padding: 15px; /* More padding */
+            border-radius: 12px; /* Consistent rounded corners */
+            margin-bottom: 10px; /* More margin */
+            border-left: 5px solid; /* Thicker border */
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center; /* Align items centrally */
+            transition: background 0.2s ease;
+        }
+
+        .transaction:hover {
+            background: #3a3a3a; /* Subtle hover effect */
         }
 
         .transaction.income {
-            background: #2f495e; /* Darker green background */
-            border-left-color: #38a169;
+            border-left-color: #5ee6a1;
         }
 
         .transaction.expense {
-            background: #4a3c4f; /* Darker red background */
-            border-left-color: #e53e3e;
+            border-left-color: #ff6b6b;
         }
 
         .transaction-info {
             flex: 1;
+            padding-right: 15px; /* Space from buttons */
         }
 
         .transaction-amount {
-            font-size: 15px; /* Slightly smaller font */
-            font-weight: 600;
-            margin-bottom: 4px; /* Reduced margin */
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .transaction-reason {
-            font-size: 13px; /* Slightly smaller font */
-            color: #cbd5e0; /* Lighter text for reason */
-            margin-bottom: 2px; /* Reduced margin */
+            font-size: 14px;
+            color: #bbccdd; /* Lighter text for reason */
+            margin-bottom: 4px;
         }
 
         .transaction-date {
-            font-size: 11px; /* Slightly smaller font */
-            color: #a0aec0; /* Subtler text for date */
+            font-size: 12px;
+            color: #9aa5b1; /* Subtler text for date */
         }
 
-        .delete-btn {
+        .transaction-actions {
+            display: flex;
+            gap: 8px; /* Gap between action buttons */
+        }
+
+        .delete-btn, .edit-btn {
             background: none;
             border: none;
-            color: #a0aec0; /* Lighter icon */
+            color: #9aa5b1; /* Subtler icon color */
             cursor: pointer;
-            padding: 4px; /* Reduced padding */
-            border-radius: 5px; /* Slightly smaller border-radius */
-            font-size: 15px; /* Slightly smaller font */
+            padding: 6px;
+            border-radius: 8px;
+            font-size: 18px; /* Larger icons */
+            transition: background 0.2s ease, color 0.2s ease;
         }
 
         .delete-btn:hover {
-            background: #444; /* Matches input background on hover */
-            color: #e53e3e;
+            background: #4a4a4a;
+            color: #ff6b6b;
+        }
+
+        .edit-btn:hover {
+            background: #4a4a4a;
+            color: #63b3ed; /* Blue for edit */
         }
 
         .empty-state {
             text-align: center;
-            color: #a0aec0;
-            padding: 30px 15px; /* Reduced padding */
-            font-size: 15px; /* Slightly smaller font */
+            color: #9aa5b1;
+            padding: 40px 20px;
+            font-size: 16px;
         }
-
-        /* Removed calculator-modal styles */
 
         /* Styles for New Features (adapted for Dark Theme) */
         .btn-back {
-            background: #6a768d; /* Darker grey */
-            color: white;
-            padding: 8px 12px; /* Reduced padding */
+            background: #4a4a4a; /* Darker grey */
+            color: #e0e6eb;
+            padding: 10px 15px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 15px; /* Slightly smaller font */
-            margin-bottom: 8px; /* Reduced margin */
+            font-size: 16px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+            font-weight: 600;
+            transition: background 0.2s ease, transform 0.2s ease;
         }
         .btn-back:hover {
-            background: #4a5568;
+            background: #5a5a5a;
+            transform: translateX(-3px);
         }
 
         #exportOptions label,
         #exportOptions select,
         #exportOptions button {
-            margin-bottom: 8px; /* Reduced margin */
+            margin-bottom: 10px; /* Increased margin */
             display: block;
             width: 100%;
         }
         #exportOptions select {
-            padding: 8px; /* Reduced padding */
-            border-radius: 8px;
-            border: 1px solid #555; /* Darker border */
-            font-size: 15px; /* Slightly smaller font */
-            background-color: #444; /* Darker background */
-            color: #e2e8f0;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #4a4a4a;
+            font-size: 16px;
+            background-color: #3a3a3a;
+            color: #e0e6eb;
+            outline: none;
         }
         #exportOptions button {
-            margin-top: 5px;
+            margin-top: 8px;
         }
         /* Specific button colors for export/clear for dark theme */
         #exportOptions .btn[onclick="exportTransactions('text')"] {
-            background-color: #3182ce; /* Blue */
-            color: white;
+            background-image: linear-gradient(135deg, #63b3ed 0%, #3182ce 100%); /* Blue gradient */
+            box-shadow: 0 5px 15px rgba(99, 179, 237, 0.3);
+        }
+        #exportOptions .btn[onclick="exportTransactions('text')"]:hover {
+             background-position: 100% 100%;
+             transform: translateY(-2px);
+             box-shadow: 0 8px 20px rgba(99, 179, 237, 0.4);
         }
         #exportOptions .btn[onclick="exportTransactions('image')"] {
-            background-color: #38a169; /* Green */
-            color: white;
+            background-image: linear-gradient(135deg, #5ee6a1 0%, #3bbd7c 100%); /* Green gradient */
+            box-shadow: 0 5px 15px rgba(94, 230, 161, 0.3);
+        }
+        #exportOptions .btn[onclick="exportTransactions('image')"]:hover {
+             background-position: 100% 100%;
+             transform: translateY(-2px);
+             box-shadow: 0 8px 20px rgba(94, 230, 161, 0.4);
         }
         #exportOptions .btn[onclick="clearAllTransactions()"] {
-            background-color: #e53e3e; /* Red */
-            color: white;
+            background-image: linear-gradient(135deg, #ff6b6b 0%, #e04a4a 100%); /* Red gradient */
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
         }
+         #exportOptions .btn[onclick="clearAllTransactions()"]:hover {
+             background-position: 100% 100%;
+             transform: translateY(-2px);
+             box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+
         hr {
-            margin: 15px 0; /* Reduced margin */
+            margin: 20px 0;
             border: none;
-            border-top: 1px solid #555; /* Darker hr */
+            border-top: 1px solid #4a4a4a; /* Darker hr */
         }
 
 
@@ -283,30 +349,55 @@
         .sheet-management {
             display: flex;
             flex-direction: column;
-            gap: 8px; /* Reduced gap */
-            margin-bottom: 15px; /* Reduced margin */
+            gap: 10px; /* Increased gap */
+            margin-bottom: 20px;
         }
         .sheet-management label {
-            color: #a0aec0;
-            font-size: 13px; /* Smaller font */
+            color: #9aa5b1;
+            font-size: 14px;
+            font-weight: 600;
         }
         .sheet-management select {
             width: 100%;
-            padding: 8px; /* Reduced padding */
-            border-radius: 10px; /* Slightly smaller border-radius */
-            border: 2px solid #555; /* Darker border */
-            font-size: 15px; /* Slightly smaller font */
-            background-color: #444; /* Darker background */
-            color: #e2e8f0;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #4a4a4a;
+            font-size: 16px;
+            background-color: #3a3a3a;
+            color: #e0e6eb;
             outline: none;
+            appearance: none; /* Remove default arrow */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23e0e6eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .sheet-management select:focus {
+             border-color: #63b3ed;
+             box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.3);
+             background-color: #3f3f3f;
         }
         .sheet-management .button-row {
-            margin-top: 0;
+            margin-top: 5px; /* Reduced top margin for buttons within this section */
         }
         .sheet-management .button-row .btn {
-            padding: 8px; /* Further reduced padding for sheet buttons */
-            font-size: 13px; /* Further reduced font size */
+            padding: 10px 15px; /* Slightly smaller buttons for sheet management */
+            font-size: 14px;
         }
+         #viewAllTransactionsBtn {
+            background-image: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%); /* Subtle dark gradient */
+            color: #e0e6eb;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            font-weight: 600;
+            margin-top: 10px; /* Space from other buttons */
+         }
+         #viewAllTransactionsBtn:hover {
+            background-position: 100% 100%;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+         }
+
 
         /* Confirmation Modal Styles */
         .modal-overlay {
@@ -316,63 +407,116 @@
             right: 0;
             bottom: 0;
             background: rgba(0,0,0,0.85); /* Even darker, more opaque background */
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
             z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         .modal-content {
-            background: #333; /* Darker background */
-            padding: 25px; /* Reduced padding */
-            border-radius: 15px; /* Smaller border-radius */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7); /* Stronger shadow */
+            background: #2a2a2a; /* Darker background */
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7); /* Stronger shadow */
             text-align: center;
-            max-width: 320px; /* Slightly smaller max-width */
+            max-width: 380px;
             width: 90%;
             color: #edf2f7;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+            opacity: 1;
         }
 
+
         .modal-message {
-            font-size: 16px; /* Slightly smaller font */
+            font-size: 18px;
             color: #edf2f7;
-            margin-bottom: 20px; /* Reduced margin */
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
 
         .modal-buttons {
             display: flex;
-            gap: 10px; /* Reduced gap */
+            gap: 15px;
             justify-content: center;
         }
         .modal-buttons button {
             flex: 1;
-            padding: 10px 15px; /* Reduced padding */
-            border-radius: 8px; /* Smaller border-radius */
-            font-size: 15px; /* Slightly smaller font */
-            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.25s ease-in-out;
             color: white;
+            background-size: 150% 150%;
+            background-position: 0% 0%;
         }
         .modal-buttons button:first-child { /* Yes button */
-            background-color: #38a169; /* Green */
+            background-image: linear-gradient(135deg, #5ee6a1 0%, #3bbd7c 100%);
+            box-shadow: 0 5px 15px rgba(94, 230, 161, 0.3);
         }
         .modal-buttons button:first-child:hover {
-            background-color: #2f855a;
+            background-position: 100% 100%;
+            transform: translateY(-2px);
         }
         .modal-buttons button:last-child { /* No button */
-            background-color: #e53e3e; /* Red */
+            background-image: linear-gradient(135deg, #ff6b6b 0%, #e04a4a 100%);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
         }
         .modal-buttons button:last-child:hover {
-            background-color: #c53030;
+            background-position: 100% 100%;
+            transform: translateY(-2px);
         }
+
+
+        /* Edit Transaction Modal Specifics */
+        #editTransactionModal .modal-message {
+            text-align: left;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        #editTransactionModal .input-group {
+            margin-bottom: 10px;
+        }
+        #editTransactionModal .modal-buttons {
+            margin-top: 20px;
+        }
+        #editTransactionModal button:first-child { /* Save button */
+            background-image: linear-gradient(135deg, #63b3ed 0%, #3182ce 100%);
+            box-shadow: 0 5px 15px rgba(99, 179, 237, 0.3);
+        }
+        #editTransactionModal button:first-child:hover {
+            background-position: 100% 100%;
+            transform: translateY(-2px);
+        }
+        #editTransactionModal button:last-child { /* Cancel button */
+            background-image: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        #editTransactionModal button:last-child:hover {
+            background-position: 100% 100%;
+            transform: translateY(-2px);
+        }
+
     </style>
 </head>
 <body>
     <div id="mainPage" class="container">
         <div class="card">
             <div class="header">
-                <div class="title" id="mainPageTitle"></div> <div class="balance-label">Current Balance</div>
+                <div class="title" id="mainPageTitle"></div>
+                <div class="balance-label">Current Balance</div>
                 <div class="balance" id="balance">₹0.00</div>
             </div>
         </div>
@@ -381,7 +525,7 @@
             <div class="sheet-management">
                 <label for="sheetSelector" class="balance-label">Select Expense Sheet:</label>
                 <select id="sheetSelector" onchange="switchSheet(this.value)">
-                    </select>
+                </select>
                 <div class="button-row">
                     <button class="btn btn-add" onclick="createNewSheet()">➕ New Sheet</button>
                     <button class="btn btn-spend" onclick="deleteActiveSheet()">🗑️ Delete Sheet</button>
@@ -393,7 +537,7 @@
             <div class="input-group">
                 <div class="input-row">
                     <input type="number" id="amount" placeholder="Enter amount" step="0.01">
-                    </div>
+                </div>
             </div>
 
             <div class="input-group">
@@ -411,14 +555,14 @@
         </div>
 
         <div class="card">
-            <button class="btn" onclick="showTransactionsPage()">View All Transactions</button>
+            <button class="btn" id="viewAllTransactionsBtn" onclick="showTransactionsPage()">View All Transactions</button>
         </div>
     </div>
 
     <div id="transactionsPage" class="container" style="display: none;">
         <div class="card">
             <button class="btn-back" onclick="showMainPage()">← Back to Main</button>
-            <h2 class="history-title" style="margin-top: 20px;">All Transactions</h2>
+            <h2 class="history-title">All Transactions</h2>
             <div id="exportOptions">
                 <label for="filterPeriod">Filter:</label>
                 <select id="filterPeriod" onchange="filterTransactions()">
@@ -440,7 +584,7 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="confirmationModal" style="display: none;">
+    <div class="modal-overlay" id="confirmationModal">
         <div class="modal-content">
             <p class="modal-message" id="confirmationMessage"></p>
             <div class="modal-buttons">
@@ -449,6 +593,33 @@
             </div>
         </div>
     </div>
+
+    <div class="modal-overlay" id="editTransactionModal">
+        <div class="modal-content">
+            <h3 class="modal-message">Edit Transaction</h3>
+            <div class="input-group">
+                <label class="balance-label" for="editAmount">Amount:</label>
+                <input type="number" id="editAmount" step="0.01">
+            </div>
+            <div class="input-group">
+                <label class="balance-label" for="editReason">Reason:</label>
+                <input type="text" id="editReason">
+            </div>
+            <div class="input-group">
+                <label class="balance-label" for="editDate">Date:</label>
+                <input type="date" id="editDate">
+            </div>
+            <div class="input-group">
+                <label class="balance-label" for="editTime">Time:</label>
+                <input type="time" id="editTime">
+            </div>
+            <div class="modal-buttons">
+                <button id="saveEditBtn" class="btn">Save</button>
+                <button id="cancelEditBtn" class="btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         let sheets = []; // Array to hold all expense sheets
@@ -468,12 +639,12 @@
 
         function showConfirmationModal(message, onConfirmCallback) {
             document.getElementById('confirmationMessage').textContent = message;
-            document.getElementById('confirmationModal').style.display = 'flex';
+            document.getElementById('confirmationModal').classList.add('active');
             currentConfirmationCallback = onConfirmCallback;
         }
 
         function hideConfirmationModal() {
-            document.getElementById('confirmationModal').style.display = 'none';
+            document.getElementById('confirmationModal').classList.remove('active');
             currentConfirmationCallback = null;
         }
 
@@ -490,6 +661,104 @@
             }
             hideConfirmationModal();
         };
+
+        // --- Edit Transaction Modal Logic ---
+        let currentEditingTransactionId = null;
+
+        function showEditTransactionModal(transaction) {
+            currentEditingTransactionId = transaction.id;
+            document.getElementById('editAmount').value = transaction.amount.toFixed(2);
+            document.getElementById('editReason').value = transaction.reason;
+
+            // Set date and time inputs
+            const tDate = new Date(transaction.timestamp);
+            const year = tDate.getFullYear();
+            const month = (tDate.getMonth() + 1).toString().padStart(2, '0');
+            const day = tDate.getDate().toString().padStart(2, '0');
+            document.getElementById('editDate').value = `${year}-${month}-${day}`;
+
+            const hours = tDate.getHours().toString().padStart(2, '0');
+            const minutes = tDate.getMinutes().toString().padStart(2, '0');
+            document.getElementById('editTime').value = `${hours}:${minutes}`;
+
+            document.getElementById('editTransactionModal').classList.add('active');
+        }
+
+        function hideEditTransactionModal() {
+            document.getElementById('editTransactionModal').classList.remove('active');
+            currentEditingTransactionId = null;
+        }
+
+        document.getElementById('saveEditBtn').onclick = () => {
+            const activeSheet = getActiveSheet();
+            if (!activeSheet || !currentEditingTransactionId) return;
+
+            const newAmount = parseFloat(document.getElementById('editAmount').value);
+            const newReason = document.getElementById('editReason').value.trim();
+            const newDateStr = document.getElementById('editDate').value;
+            const newTimeStr = document.getElementById('editTime').value;
+
+            if (isNaN(newAmount) || newAmount <= 0) {
+                alert('Please enter a valid positive amount.');
+                return;
+            }
+            if (!newReason) {
+                alert('Reason cannot be empty.');
+                return;
+            }
+            if (!newDateStr || !newTimeStr) {
+                alert('Date and time are required.');
+                return;
+            }
+
+            const oldTransactionIndex = activeSheet.transactions.findIndex(t => t.id === currentEditingTransactionId);
+            if (oldTransactionIndex === -1) {
+                alert('Transaction not found!');
+                return;
+            }
+
+            const oldTransaction = activeSheet.transactions[oldTransactionIndex];
+
+            // Re-calculate balance based on old and new amounts/types
+            if (oldTransaction.type === 'income') {
+                activeSheet.balance -= oldTransaction.amount;
+            } else {
+                activeSheet.balance += oldTransaction.amount;
+            }
+
+            // Create new timestamp
+            const newTimestamp = new Date(`${newDateStr}T${newTimeStr}:00`).toISOString();
+
+            const updatedTransaction = {
+                id: oldTransaction.id,
+                type: oldTransaction.type, // Type remains the same
+                amount: newAmount,
+                reason: newReason,
+                timestamp: newTimestamp,
+                date: new Date(newTimestamp).toLocaleDateString('en-GB'),
+                time: new Date(newTimestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+            };
+
+            if (updatedTransaction.type === 'income') {
+                activeSheet.balance += updatedTransaction.amount;
+            } else {
+                activeSheet.balance -= updatedTransaction.amount;
+            }
+
+            activeSheet.transactions[oldTransactionIndex] = updatedTransaction; // Replace old with updated
+            activeSheet.transactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // Re-sort by date
+            
+            saveData();
+            updateBalance();
+            filterTransactions(); // Re-render transactions with updated data
+            hideEditTransactionModal();
+            alert('Transaction updated successfully!');
+        };
+
+        document.getElementById('cancelEditBtn').onclick = () => {
+            hideEditTransactionModal();
+        };
+
 
         // --- Data Persistence ---
         function loadData() {
@@ -653,14 +922,15 @@
             }
 
             if (amount && amount > 0) {
+                const now = new Date();
                 const transaction = {
-                    id: generateUniqueId(), // Use unique ID for transactions too
+                    id: generateUniqueId(),
                     type: 'income',
                     amount: amount,
                     reason: reason,
-                    timestamp: new Date().toISOString(), // Use ISO string for reliable date parsing later
-                    date: new Date().toLocaleDateString('en-GB'),
-                    time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+                    timestamp: now.toISOString(),
+                    date: now.toLocaleDateString('en-GB'),
+                    time: now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
                 };
 
                 activeSheet.balance += amount;
@@ -671,7 +941,7 @@
                 amountInput.value = '';
                 reasonInput.value = '';
             } else {
-                 alert('Please enter a valid positive amount.');
+                alert('Please enter a valid positive amount.');
             }
         }
 
@@ -688,14 +958,15 @@
             }
 
             if (amount && amount > 0 && reason) {
+                const now = new Date();
                 const transaction = {
                     id: generateUniqueId(),
                     type: 'expense',
                     amount: amount,
                     reason: reason,
-                    timestamp: new Date().toISOString(), // Use ISO string for reliable date parsing later
-                    date: new Date().toLocaleDateString('en-GB'),
-                    time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+                    timestamp: now.toISOString(),
+                    date: now.toLocaleDateString('en-GB'),
+                    time: now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
                 };
 
                 activeSheet.balance -= amount;
@@ -752,14 +1023,17 @@
                         <div class="transaction-reason">${transaction.reason}</div>
                         <div class="transaction-date">${transaction.date} at ${transaction.time}</div>
                     </div>
-                    <button class="delete-btn" onclick="deleteTransaction('${transaction.id}')">🗑️</button>
+                    <div class="transaction-actions">
+                        <button class="edit-btn" onclick="showEditTransactionModal(${JSON.stringify(transaction).replace(/"/g, '&quot;')})">✏️</button>
+                        <button class="delete-btn" onclick="deleteTransaction('${transaction.id}')">🗑️</button>
+                    </div>
                 </div>
             `).join('');
         }
 
         // --- Page Navigation Functions ---
         function showMainPage() {
-            document.getElementById('mainPage').style.display = 'block';
+            document.getElementById('mainPage').style.display = 'flex'; // Use flex for proper centering
             document.getElementById('transactionsPage').style.display = 'none';
             updateMainPageTitle(); // Ensure title is correct when returning to main page
         }
@@ -805,7 +1079,7 @@
                 });
             } else if (filterPeriod === 'currentWeek') {
                 const startOfWeek = new Date(now);
-                startOfWeek.setDate(now.getDate() - now.getDay());
+                startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday is 0
                 startOfWeek.setHours(0,0,0,0);
                 const endOfWeek = new Date(startOfWeek);
                 endOfWeek.setDate(startOfWeek.getDate() + 6);
@@ -816,7 +1090,8 @@
                     return tDate >= startOfWeek && tDate <= endOfWeek;
                 });
             }
-
+            // Sort by timestamp in descending order (most recent first)
+            filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             updateTransactionHistory(filtered); // Display the filtered transactions
         }
 
@@ -828,59 +1103,61 @@
                 return;
             }
 
-            if (activeSheet.transactions.length === 0) {
-                alert("No transactions in the current sheet to export.");
+            // Get current filtered transactions directly from `filterTransactions` logic
+            let currentFilteredTransactions = [];
+            const filterPeriod = document.getElementById('filterPeriod').value;
+            const now = new Date();
+            let transactionsToFilter = activeSheet.transactions; // Use active sheet's transactions
+
+            if (filterPeriod === 'all') {
+                currentFilteredTransactions = [...transactionsToFilter];
+            } else if (filterPeriod === 'currentMonth') {
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+                currentFilteredTransactions = transactionsToFilter.filter(t => {
+                    const tDate = new Date(t.timestamp);
+                    return tDate.getMonth() === currentMonth && tDate.getFullYear() === currentYear;
+                });
+            } else if (filterPeriod === 'lastMonth') {
+                let lastMonth = now.getMonth() - 1;
+                let lastMonthYear = now.getFullYear();
+                if (lastMonth < 0) {
+                    lastMonth = 11;
+                    lastMonthYear--;
+                }
+                currentFilteredTransactions = transactionsToFilter.filter(t => {
+                    const tDate = new Date(t.timestamp);
+                    return tDate.getMonth() === lastMonth && tDate.getFullYear() === lastMonthYear;
+                });
+            } else if (filterPeriod === 'currentWeek') {
+                const startOfWeek = new Date(now);
+                startOfWeek.setDate(now.getDate() - now.getDay());
+                startOfWeek.setHours(0,0,0,0);
+                const endOfWeek = new Date(startOfWeek);
+                endOfWeek.setDate(startOfWeek.getDate() + 6);
+                endOfWeek.setHours(23,59,59,999);
+
+                currentFilteredTransactions = transactionsToFilter.filter(t => {
+                    const tDate = new Date(t.timestamp);
+                    return tDate >= startOfWeek && tDate <= endOfWeek;
+                });
+            }
+
+            // Sort by timestamp for consistent export order
+            currentFilteredTransactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+
+            if (currentFilteredTransactions.length === 0) {
+                alert("No transactions to export for the selected period.");
                 return;
             }
 
             const periodName = document.getElementById('filterPeriod').options[document.getElementById('filterPeriod').selectedIndex].text;
             const fileName = `transactions_${activeSheet.name.replace(/\s+/g, '_')}_${periodName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}`;
 
+
             if (format === 'text') {
                 let textContent = `--- Money Tracker Transactions for "${activeSheet.name}" (${periodName}) ---\n\n`;
-                // Get current filtered transactions directly from `filterTransactions` logic
-                let currentFilteredTransactions = [];
-                const filterPeriod = document.getElementById('filterPeriod').value;
-                const now = new Date();
-
-                if (filterPeriod === 'all') {
-                    currentFilteredTransactions = [...activeSheet.transactions];
-                } else if (filterPeriod === 'currentMonth') {
-                    const currentMonth = now.getMonth();
-                    const currentYear = now.getFullYear();
-                    currentFilteredTransactions = activeSheet.transactions.filter(t => {
-                        const tDate = new Date(t.timestamp);
-                        return tDate.getMonth() === currentMonth && tDate.getFullYear() === currentYear;
-                    });
-                } else if (filterPeriod === 'lastMonth') {
-                    let lastMonth = now.getMonth() - 1;
-                    let lastMonthYear = now.getFullYear();
-                    if (lastMonth < 0) {
-                        lastMonth = 11;
-                        lastMonthYear--;
-                    }
-                    currentFilteredTransactions = activeSheet.transactions.filter(t => {
-                        const tDate = new Date(t.timestamp);
-                        return tDate.getMonth() === lastMonth && tDate.getFullYear() === lastMonthYear;
-                    });
-                } else if (filterPeriod === 'currentWeek') {
-                    const startOfWeek = new Date(now);
-                    startOfWeek.setDate(now.getDate() - now.getDay());
-                    startOfWeek.setHours(0,0,0,0);
-                    const endOfWeek = new Date(startOfWeek);
-                    endOfWeek.setDate(startOfWeek.getDate() + 6);
-                    endOfWeek.setHours(23,59,59,999);
-
-                    currentFilteredTransactions = activeSheet.transactions.filter(t => {
-                        const tDate = new Date(t.timestamp);
-                        return tDate >= startOfWeek && tDate <= endOfWeek;
-                    });
-                }
-
-                if (currentFilteredTransactions.length === 0) {
-                    alert("No transactions to export for the selected period.");
-                    return;
-                }
 
                 currentFilteredTransactions.forEach(t => {
                     textContent += `Type: ${t.type.toUpperCase()}\n`;
@@ -909,31 +1186,93 @@
                     return;
                 }
 
-                // Store original styles to revert later
-                const originalElementWidth = element.style.width;
-                const originalElementPadding = element.style.padding;
-                const originalElementBackgroundColor = element.style.backgroundColor;
-                const originalCardPadding = document.querySelector('#transactionsPage .card').style.padding;
+                // Temporarily clone the element to capture only the visible filtered transactions
+                // and apply necessary styles for a better screenshot.
+                const tempDiv = document.createElement('div');
+                tempDiv.style.background = '#2a2a2a'; // Match card background
+                tempDiv.style.padding = '25px';
+                tempDiv.style.borderRadius = '20px';
+                tempDiv.style.fontFamily = "'Lato', sans-serif";
+                tempDiv.style.color = '#e0e6eb';
+                tempDiv.style.width = '100%'; // Ensure it takes full width for capture
+                tempDiv.style.boxSizing = 'border-box'; // Include padding in width
 
+                // Add a title to the image
+                const titleHeading = document.createElement('h2');
+                titleHeading.textContent = `Transactions for "${activeSheet.name}" (${periodName})`;
+                titleHeading.style.fontFamily = "'Montserrat', sans-serif";
+                titleHeading.style.fontSize = '20px';
+                titleHeading.style.fontWeight = '700';
+                titleHeading.style.color = '#f8f9fa';
+                titleHeading.style.marginBottom = '20px';
+                titleHeading.style.textAlign = 'center';
+                tempDiv.appendChild(titleHeading);
 
-                // Set temporary styles for better capture
-                element.style.width = 'fit-content';
-                element.style.padding = '15px'; /* Consistent with card padding */
-                element.style.backgroundColor = '#333'; /* Use card background for screenshot */
-                document.querySelector('#transactionsPage .card').style.padding = '0'; // Remove card padding for direct element capture
+                // Add each transaction as a styled div
+                currentFilteredTransactions.forEach(t => {
+                    const transactionDiv = document.createElement('div');
+                    transactionDiv.className = `transaction ${t.type}`;
+                    transactionDiv.style.cssText = `
+                        background: #333333;
+                        padding: 15px;
+                        border-radius: 12px;
+                        margin-bottom: 10px;
+                        border-left: 5px solid ${t.type === 'income' ? '#5ee6a1' : '#ff6b6b'};
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        font-size: 14px;
+                        box-sizing: border-box;
+                    `;
 
-                html2canvas(element, {
+                    const infoDiv = document.createElement('div');
+                    infoDiv.style.flex = '1';
+                    infoDiv.style.paddingRight = '15px';
+
+                    const amountDiv = document.createElement('div');
+                    amountDiv.className = `transaction-amount ${t.type === 'income' ? 'positive' : 'negative'}`;
+                    amountDiv.style.cssText = `
+                        font-size: 17px;
+                        font-weight: 700;
+                        margin-bottom: 6px;
+                        font-family: 'Montserrat', sans-serif;
+                        color: ${t.type === 'income' ? '#5ee6a1' : '#ff6b6b'};
+                    `;
+                    amountDiv.textContent = `${t.type === 'income' ? '+' : '-'}₹${t.amount.toFixed(2)}`;
+
+                    const reasonDiv = document.createElement('div');
+                    reasonDiv.className = 'transaction-reason';
+                    reasonDiv.style.cssText = `
+                        font-size: 14px;
+                        color: #bbccdd;
+                        margin-bottom: 4px;
+                    `;
+                    reasonDiv.textContent = t.reason;
+
+                    const dateDiv = document.createElement('div');
+                    dateDiv.className = 'transaction-date';
+                    dateDiv.style.cssText = `
+                        font-size: 12px;
+                        color: #9aa5b1;
+                    `;
+                    dateDiv.textContent = `${t.date} at ${t.time}`;
+
+                    infoDiv.appendChild(amountDiv);
+                    infoDiv.appendChild(reasonDiv);
+                    infoDiv.appendChild(dateDiv);
+                    transactionDiv.appendChild(infoDiv);
+                    tempDiv.appendChild(transactionDiv);
+                });
+
+                document.body.appendChild(tempDiv); // Append to body temporarily for html2canvas to capture
+
+                html2canvas(tempDiv, {
                     scale: 2, // Increase resolution for better clarity
                     logging: false, // Turn off console logs from html2canvas
-                    useCORS: true, // Important if you have external resources
+                    useCORS: true, // Important if you have external resources (like Google Fonts)
                     scrollY: -window.scrollY // Capture from top of the element, not viewport
                 }).then(canvas => {
-                    // Revert styles after capture
-                    element.style.width = originalElementWidth;
-                    element.style.padding = originalElementPadding;
-                    element.style.backgroundColor = originalElementBackgroundColor;
-                    document.querySelector('#transactionsPage .card').style.padding = originalCardPadding;
-
+                    document.body.removeChild(tempDiv); // Remove the temporary div
 
                     const imgData = canvas.toDataURL('image/png');
                     const a = document.createElement('a');
@@ -946,11 +1285,12 @@
                 }).catch(err => {
                     console.error('Error exporting as image:', err);
                     alert('Failed to export as image. Please check console for details.');
+                    if (tempDiv.parentNode) { // Ensure to remove tempDiv even on error
+                        document.body.removeChild(tempDiv);
+                    }
                 });
             }
         }
-
-        // Removed calculator functions
 
         // --- PWA Service Worker Registration ---
         if ('serviceWorker' in navigator) {
